@@ -25,3 +25,13 @@
 .btn-sidebar.expand{
     width: 8vw;
 }
+
+/* navbar */
+.nav-right *:hover, .nav-left  > *:hover{
+    opacity: 0.6;
+}
+
+.dropdown-item:hover{
+    color: white;
+    background-color: #212529;
+}

@@ -12,13 +12,9 @@
     </head>
 
     <body class="container.fluid w-100 m-0 d-flex  " style="background-color: whitesmoke">
-
         <x-sidebar/>
         <div class="content w-100">
-
-
             <x-nav-bar/>
-
             <div class="toast-container position-absolute top-0 end-0  m-2">
                 <div id="success-toast" class="toast success-toast align-items-center bg-success-subtle  shadow-sm " role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
@@ -146,7 +142,7 @@
                     </div>
                   </div>
 
-                <table id="myTable" class="table table-striped table-dark table-hover " style="width: 100%" data-turbolinks="false"></table>
+                <table id="myTable" class="table table-hover table-nowrap table-row-border" style="width: 100%" data-turbolinks="false"></table>
             </main>
         </div>
 
