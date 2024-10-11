@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css', ])
+        @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css', 'resources/css/custom.sidebar.css' ])
 
     </head>
 
@@ -40,7 +40,7 @@
           </div>
         </div>
         <main class="containe.fluid">
-          <h1 class="h1 text-center mt-4" >Manage Company Profiles</h1>
+          <h1 class="h1 p-3  py-4 bg-white shadow-sm" >Manage Company Profiles</h1>
           <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
               <div class="modal-dialog modal-dialog-centered ">
@@ -82,7 +82,7 @@
                 </div>
               </div>
             </div>
-            <table id="myTable" class="table table-striped table-dark table-hover  " style="width: 100%"> </table>
+            <table id="myTable" class="table table-hover  " style="width: 100%"> </table>
         </main>
 </div>
       <script type="module">
@@ -133,7 +133,7 @@
                   title: 'Actions',
                   render: function (data, type, row) {
                       return `  <button class="d-inline btn  btn-edit p-0 " id="btn-edit-${row.id}" data-id="${row.id}" data-bs-toggle="modal" data-bs-target=".modal" >
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="dodgerblue" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#1DB954" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                       <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                       <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                   </svg>
@@ -178,17 +178,21 @@
                   className: 'dt-center'
                 },
               ],
-             });
+            });
 
-             $('.sidebar').hover(function () {
-                        $('.sidebar a').toggleClass('expand')
-                        $('.sidebar a .sidebar-btn-txt').toggleClass('d-none' , false).fadeIn("slow");
-                    },function () {
-                        $('.sidebar a').toggleClass('expand')
-                        $('.sidebar a .sidebar-btn-txt').toggleClass('d-none' , true).fadeOut("slow");
-                    }
-            );
-            
+            //sidebar
+            $('#sidebar-toggle').on('click', function() {
+                $('#nav-bar').toggleClass('show');
+                $('#sidebar').toggleClass('sidebar-pd');
+            });
+
+            const linkColor = $('.nav_link');
+            function colorLink() {
+                linkColor.removeClass('active');
+                $(this).addClass('active');
+            }
+            linkColor.on('click', colorLink);
+
             // Delete Company
             $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
                 $('#btn-dlt').text('Delete').attr('data-id' , table.row($(this).parents('tr')).data().id)

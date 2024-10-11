@@ -3,15 +3,21 @@
 }
 
 #btn-add-record{
-    background-color: dodgerblue;
-    height: 30px;
+    background-color: white;
+    height: 32px;
     text-align: right;
-    border-style: hidden;
-    border-radius: 5px;
+    border: 2px solid #022658;
+    border-radius: 10px;
     font-size: 1.2rem;
     padding: 0 20px;
     margin-top: 20px;
+    color: #022658;
+    font-weight: 500;
+}
 
+#btn-add-record:hover{
+    background-color: #022658;
+    color: white;
 }
 
 #myTable > thead {
@@ -35,5 +41,19 @@
 }
 
 .dt-scroll-headInner, .table{
-    width: 100% !important
-  }
+    width: 100% !important;
+}
+
+ table > thead > tr  th{
+    background-color: #F8F9FA !important;
+
+ }
+
+ #myTable_wrapper{
+    margin-top: 20px;
+    margin-left: 19px;
+    background-color: white;
+    width: 98%;
+    border-radius: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
+}
