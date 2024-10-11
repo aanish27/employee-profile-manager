@@ -1,4 +1,4 @@
-<nav class="navbar w-100  ps-2 pe-3 bg-white shadow" >
+<nav class="navbar w-100  ps-2 pe-3 bg-white shadow-sm" >
     <div class="nav-left d-flex align-items-center gap-2">
         <button href="" class="btn btn-nav m-0 p-0">
             <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" fill="currentColor" class="bi bi-justify" viewBox="0 0 16 16">

@@ -42,7 +42,7 @@
             </div>
 
             <main class="container.fluid" >
-                <h1 class="h1 text-center mt-4" >Manage Employee Profiles</h1>
+                <h1 class="h1 p-3  py-4 bg-white shadow-sm" >Manage Employee Profiles</h1>
 
                 <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
