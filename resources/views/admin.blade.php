@@ -262,11 +262,8 @@
                 });
 
                 const linkColor = $('.nav_link');
-                function colorLink() {
-                    linkColor.removeClass('active');
-                    $(this).addClass('active');
-                }
-                linkColor.on('click', colorLink);
+                linkColor.removeClass('active');
+                $('#btn-employee').addClass('active');
 
                 //dlt btn
                 $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
