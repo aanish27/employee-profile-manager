@@ -259,11 +259,16 @@
                 $('#sidebar-toggle').on('click', function() {
                     $('#nav-bar').toggleClass('show');
                     $('#sidebar').toggleClass('sidebar-pd');
+                    $('.nav_link').toggleClass('nav_link-show');
                 });
 
                 const linkColor = $('.nav_link');
-                linkColor.removeClass('active');
+                linkColor.removeClass('active')
                 $('#btn-employee').addClass('active');
+
+                $('body').tooltip({
+                    selector: '[data-bs-toggle="tooltip"]',
+                });
 
                 //dlt btn
                 $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
