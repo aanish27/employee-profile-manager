@@ -3,7 +3,8 @@ window.axios = axios;
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 import $ from "jquery";
-window.$ = $;
+//bootsrap + jquery needs this
+window.jQuery = window.$ = $;
 
 import DataTable from 'datatables.net-bs5';
 window.DataTable = DataTable;

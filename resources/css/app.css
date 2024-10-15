@@ -1,3 +1,31 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap";
 
+/* navbar */
+.nav-right *:hover, .nav-left  > *:hover{
+    opacity: 0.6;
+}
+
+.dropdown-item:hover{
+    color: white;
+    background-color: #212529;
+}
+
+.dropdown-toggle {
+    outline: 0;
+}
+
+.bi {
+    vertical-align: -.125em;
+}
+
+.nav-link{
+    color: whitesmoke;
+}
+
+.nav-link:hover{
+    background-color: white;
+    color: black;
+}
+
+
