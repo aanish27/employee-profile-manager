@@ -145,7 +145,7 @@
                                   </svg>
                               </button> `
                     },
-                    width: '6%',
+                    width: '8%',
                 },
                 {
                   data: 'name',
