@@ -263,7 +263,7 @@
 
                 const linkColor = $('.nav_link');
                 linkColor.removeClass('active')
-                $('#btn-employee').addClass('active');
+                $('.btn-employee').addClass('active');
 
                 $('body').tooltip({
                     selector: '[data-bs-toggle="tooltip"]',

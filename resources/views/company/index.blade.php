@@ -181,20 +181,18 @@
             });
 
             // sidebar
-                $('#sidebar-toggle').on('click', function() {
-                    $('#nav-bar').toggleClass('show');
-                    $('#sidebar').toggleClass('sidebar-pd');
-                    $('#btn-company').toggleClass('nav_link-show');
-                });
+            $('#sidebar-toggle').on('click', function() {
+                $('#sidebar-long').toggleClass('d-none');
+                $('#sidebar-short').toggleClass('d-none');
+            });
 
-                const linkColor = $('.nav_link');
-                linkColor.removeClass('active');
-                $('#btn-company').addClass('active');
+            const linkColor = $('.nav_link');
+            linkColor.removeClass('active')
+            $('.btn-company').addClass('active');
 
-                $('body').tooltip({
-                    selector: '[data-bs-toggle="tooltip"]',
-                });
-
+            $('body').tooltip({
+                selector: '[data-bs-toggle="tooltip"]',
+            });
 
             // Delete Company
             $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
