@@ -257,9 +257,8 @@
 
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {
-                    $('#nav-bar').toggleClass('show');
-                    $('#sidebar').toggleClass('sidebar-pd');
-                    $('.nav_link').toggleClass('nav_link-show');
+                    $('#sidebar-long').toggleClass('d-none');
+                    $('#sidebar-short').toggleClass('d-none');
                 });
 
                 const linkColor = $('.nav_link');
