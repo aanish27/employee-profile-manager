@@ -148,7 +148,7 @@
 
         <script type="module">
             $(function(){
-                let table= $('#myTable').DataTable({
+                let table = $('#myTable').DataTable({
                     fixedColumns: true,
                     scrollCollapse: true,
                     scrollY: 500,
@@ -255,10 +255,13 @@
                     ],
                 });
 
+
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {
                     $('#sidebar-long').toggleClass('d-none');
                     $('#sidebar-short').toggleClass('d-none');
+                    table.columns.adjust();
+
                 });
 
                 const linkColor = $('.nav_link');
@@ -278,7 +281,7 @@
                     axios.delete(`employee/${$(this).attr('data-id')}`)
                     .then(function (response){
                         displayToast(response , "success")
-                         $('.btn-close-dlt').click();
+                        $('.btn-close-dlt').click();
                     });
                     table.draw(false);
                 });
@@ -290,6 +293,8 @@
                     $('#btn-submit').text("Add Employee");
                     $('.trash').toggleClass("d-none" , true);
                 };
+
+
 
                 $('.modal-body').on('submit' , '#form-create', function (e){
                     e.preventDefault();
