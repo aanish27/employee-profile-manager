@@ -42,9 +42,9 @@
             <img src="{{ asset('images/logo.webp') }}" alt="" width="32" height="32" class="rounded-circle me-2">
             <strong>{{ Auth::user()->name }}</strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow p-1">
             <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider mb-0 mt-0""></li>
             <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item " style=""> Logout</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -95,9 +95,9 @@
         <a href="#" class="d-flex align-items-center text-light  justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{{ asset('images/logo.webp') }}" alt="" width="32" height="32" class="rounded-circle me-2">
         </a>
-        <ul class="dropdown-menu text-small shadow">
+        <ul class="dropdown-menu text-small shadow p-1">
             <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider mb-0 mt-0"></li>
             <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item " style=""> Logout</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
