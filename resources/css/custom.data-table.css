@@ -1,5 +1,9 @@
-.dt-scroll-head{
+#myTable > thead{
     display: none;
+}
+
+.dt-scroll-head{
+    height: 30px;
 }
 
 #myTable  tr td{
@@ -10,7 +14,6 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
-
 .dt-scroll,.dt-scroll-headInner, .table{
     width: 100% !important;
 }
@@ -30,4 +33,7 @@
     padding: 12px;
     padding-top: 0;
     padding-bottom: 0;
+}
+.dt-scroll-foot{
+    display: none;
 }
