@@ -42,47 +42,47 @@
             </div>
 
             <main class="container.fluid" >
-                <h1 class="h1 p-3  py-4 bg-white shadow-sm" >Manage Employee Profiles</h1>
+                <h1 class="fs-4 bg-white shadow-sm py-2" >Manage Employee Profiles</h1>
 
                 <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
                     <div class="modal-dialog modal-dialog-centered ">
-                      <div class="modal-content text-light" style="background-color: #212529 ; width: auto;">
+                      <div class="modal-content " style=" width: auto;">
                         <button type="button" id="btn-modal-close" class="btn-close m-2 text-bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                         <h3 class="text-center m-0" id="form-title"></h3>
                         <div class="modal-body m-0">
-                            <form class="form-modal row  p-3">
+                            <form class="form-modal row  p-1">
                                 @csrf
-                                <div class="mb-2 col-12">
-                                    <label for="name" class="form-label">Name:</label>
-                                    <input type="text" class=" form-control " id="name" name="name" placeholder="Full Name" required>
+                                <div class="mb-2 col-3">
+                                    <label for="name" class="form-label fw-bold ">Name:</label>
+                                    <input type="text" class=" form-control py-1 " id="name" name="name" placeholder="Full Name" required>
                                 </div>
-                                <div class=" mb-2 col-6">
-                                    <label class="form-label" for="position">Position:</label>
-                                    <input type="text" class=" form-control " id="position" name="position" placeholder="Position" required>
+                                <div class=" mb-2 col-3">
+                                    <label class="form-label fw-bold" for="position">Position:</label>
+                                    <input type="text" class=" form-control py-1 " id="position" name="position" placeholder="Position" required>
                                 </div>
-                                <div class="mb-2 col-6" >
-                                    <label class="form-label" for="dob">DOB:</label>
-                                    <input type="date" class=" form-control " id="dob" name="dob" placeholder="DOB" required>
+                                <div class="mb-2 col-3" >
+                                    <label class="form-label fw-bold" for="dob">DOB:</label>
+                                    <input type="date" class=" form-control py-1 " id="dob" name="dob" placeholder="DOB" required>
                                 </div>
-                                <div class=" mb-2 col-6">
-                                    <label class="form-label" for="email">Email:</label>
-                                    <input type="email" class=" form-control " id="email" name="email" placeholder="Email" required>
+                                <div class=" mb-2 col-3">
+                                    <label class="form-label fw-bold" for="email">Email:</label>
+                                    <input type="email" class=" form-control py-1 " id="email" name="email" placeholder="Email" required>
 
                                 </div>
-                                <div class=" mb-2 col-6">
-                                    <label class="form-label" for="phone">Phone:</label>
-                                    <input type="phone" class=" form-control " id="phone" name="phone" placeholder="Phone" required>
+                                <div class=" mb-2 col-3">
+                                    <label class="form-label fw-bold" for="phone">Phone:</label>
+                                    <input type="phone" class=" form-control py-1 " id="phone" name="phone" placeholder="Phone" required>
 
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="address">Address:</label>
-                                    <input type="text" class=" form-control " id="address" name="address" placeholder="Address" required>
+                                <div class="col-9">
+                                    <label class="form-label fw-bold" for="address">Address:</label>
+                                    <input type="text" class=" form-control py-1 " id="address" name="address" placeholder="Address" required>
                                 </div>
 
-                                <div class="mt-4 mb-2 col-6 d-inline">
-                                    <label class="form-label" for="select">Choose Company: </label>
-                                    <select id="select" name="company_id" class="form-select form-control  " aria-label="Default select example">
+                                <div class="mt-2 mb-2 col-6 d-inline">
+                                    <label class="form-label fw-bold" for="select">Choose Company: </label>
+                                    <select id="select" name="company_id" class="form-select form-control py-1  " aria-label="Default select example">
                                         <option hidden>Company</option>
                                         @foreach ( $companies  as $company )
                                             <option value="{{ $company->id }}"  class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
@@ -90,33 +90,33 @@
                                     </select>
                                 </div>
 
-                                <div class="mt-4 mb-2 col-6">
-                                    <label class="form-label" for="company-branch">Branch:</label>
-                                    <input type="text" class="form-control " id="company-branch" name="company_branch" placeholder="Branch" required disabled>
+                                <div class="mt-2 col-6">
+                                    <label class="form-label fw-bold" for="company-branch">Branch:</label>
+                                    <input type="text" class="form-control py-1 " id="company-branch" name="company_branch" placeholder="Branch" required disabled>
                                 </div>
 
                                 <input type="hidden" name="bank_id" id="bank-id">
 
-                                <div class="mt-4 mb-2 col-12">
-                                    <label class="form-label" for="beneficiary-name">Beneficiary Name:</label>
-                                    <input type="text" class=" form-control "  id="beneficiary-name" name="beneficiary_name" placeholder="Beneficiary Name" required>
+                                <div class="mt-2 mb-2 col-6">
+                                    <label class="form-label fw-bold" for="beneficiary-name">Beneficiary Name:</label>
+                                    <input type="text" class=" form-control py-1 "  id="beneficiary-name" name="beneficiary_name" placeholder="Beneficiary Name" required>
+                                </div>
+
+                                <div class="mt-2 mb-2 col-6">
+                                    <label class="form-label fw-bold" for="bank-name">Bank Name</label>
+                                    <input type="text" class=" form-control py-1 " id="bank-name" name="bank_name" placeholder="Bank Name" required>
                                 </div>
 
                                 <div class="mb-2 col-6">
-                                    <label class="form-label" for="bank-name">Bank Name</label>
-                                    <input type="text" class=" form-control " id="bank-name" name="bank_name" placeholder="Bank Name" required>
+                                    <label class="form-label fw-bold" for="bank-branch">Branch</label>
+                                    <input type="phone" class=" form-control py-1 " id="bank-branch" name="branch" placeholder="Branch" required>
                                 </div>
 
                                 <div class="mb-2 col-6">
-                                    <label class="form-label" for="bank-branch">Branch</label>
-                                    <input type="phone" class=" form-control " id="bank-branch" name="branch" placeholder="Branch" required>
+                                    <label class="form-label fw-bold" for="account-no">Account No:</label>
+                                    <input type="number" class=" form-control py-1 " id="account-no" name="account_no" placeholder="Account No" required>
                                 </div>
-
-                                <div class="mb-2 col-12">
-                                    <label class="form-label" for="account-no">Account No:</label>
-                                    <input type="number" class=" form-control " id="account-no" name="account_no" placeholder="Account No" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary  ms-2 mt-4 p-0 border-0 " style="height: 40px ; width: 98%" id="btn-submit"></button>
+                                <button type="submit" class="col-3 btn btn-primary mt-3 p-0 border-0 " style="height: 40px; margin-left: 74%;" id="btn-submit"></button>
                             </form>
                         </div>
                       </div>
@@ -194,13 +194,13 @@
                             title: "Actions",
                             render: function (data, type, row) {
                                 return `  <button class="d-inline btn  btn-edit p-0 " id="btn-edit-${row.id}" data-id="${row.id}" data-bs-toggle="modal" data-bs-target=".modal" >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#1DB954" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#1DB954" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                             </svg>
                                           </button>
                                            <button class="btn btn-dlt-modal p-0 d-inline" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#deletConfirmation" >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                                             </svg>
