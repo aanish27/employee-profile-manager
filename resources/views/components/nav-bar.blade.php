@@ -6,9 +6,7 @@
             </svg>
         </button>
 
-        <form class="" role="search" >
-            <input class="form-control me-5  rounded-5" style="height: 25px" type="search" placeholder="Search" aria-label="Search">
-        </form>
+         <h1 class="fs-4" >Manage Employee Profiles</h1>
     </div>
 
     <div class="nav-right d-flex align-items-center gap-2 ">

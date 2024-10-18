@@ -42,7 +42,6 @@
             </div>
 
             <main class="container.fluid" >
-                <h1 class="fs-4 bg-white shadow-sm py-2" >Manage Employee Profiles</h1>
 
                 <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
@@ -167,11 +166,12 @@
                         },
                         top1End:{
                             buttons: [{
-                                text: '<i class="bi bi-plus-lg" ></i> New',
+                                text: 'New',
                                 attr: {
                                     id: 'btn-add-record',
                                     'data-bs-toggle': 'modal',
                                     'data-bs-target': '.modal',
+                                    class: 'btn btn-outline-primary rounded-4 px-4 py-1 mt-4' ,
                                 },
                                 action: function (e, dt, node, config, cb) {
                                     storeEmployee()
