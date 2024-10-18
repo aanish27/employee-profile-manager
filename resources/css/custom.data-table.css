@@ -1,17 +1,18 @@
-#myTable_wrapper > .row{
-    margin: 0;
+#btn-add-record{
+    background-color: white;
+    height: 25px;
+    border: 2px solid #0d6efd;
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 0 10px;
+    margin-top: 20px;
+    color: #0d6efd;
+    font-weight: 500;
 }
 
-#btn-add-record{
-    background-color: dodgerblue;
-    height: 30px;
-    text-align: right;
-    border-style: hidden;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    padding: 0 20px;
-    margin-top: 20px;
-
+#btn-add-record:hover{
+    background-color: #0d6efd;
+    color: white;
 }
 
 #myTable > thead {
@@ -24,12 +25,34 @@
 
 #myTable  tr td{
     padding: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
 }
 
 .dt-scroll{
     width: 100%;
 }
 
-.dt-center{
-    text-align: center;
+.dt-scroll-headInner, .table{
+    width: 100% !important;
+}
+
+ table > thead > tr  th{
+    background-color: #F8F9FA !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+ #myTable_wrapper{
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
+    padding: 12px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
