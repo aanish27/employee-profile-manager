@@ -369,6 +369,13 @@
                     $('#company-branch').val($(this).find(':selected').data('branch'))
                 });
 
+                $('#dt-length-0').change(function() {
+                    if ($(this).val() != '10') {
+                        $('.dt-scroll-headInner').attr('style', 'width: 99% !important');
+                    }
+                    
+                });
+
                 //Toast Alerts
                 function displayToast(response , type){
                     const valErrorDiv = $('.toast-container')

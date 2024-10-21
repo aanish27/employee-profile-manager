@@ -80,7 +80,7 @@
                         <label for="employees" class="form-label employee-label fw-bold d-none ">Employees:</label>
                         <input type="hidden" class=" form-control py-1" id="employees" disabled>
                       </div>
-                      
+
                       <div class="modal-footer py-0 border-0 ">
                         <button type="submit" class="btn btn-primary rounded-2 px-3 py-1 m-0 " id="btn-submit"></button>
                       </div>
@@ -299,6 +299,15 @@
                     displayToast(response , "error")
                 });
             });
+
+            //header missalignment on filter
+            $('#dt-length-0').change(function() {
+                    if ($(this).val() != '10') {
+                        $('.dt-scroll-headInner').attr('style', 'width: 99% !important');
+                    }
+
+            });
+
             //Toast Alerts
             function displayToast(response , type){
               const valErrorDiv = $('.toast-container')
