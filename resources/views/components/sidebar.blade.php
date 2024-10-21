@@ -98,12 +98,7 @@
         <ul class="dropdown-menu text-small shadow p-1">
             <li><a class="dropdown-item" href="#">Settings</a></li>
             <li><hr class="dropdown-divider mb-0 mt-0"></li>
-            <li>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item " style=""> Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            </li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
         </ul>
     </div>
 </div>
