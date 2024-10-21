@@ -42,8 +42,10 @@
             <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
               <div class="modal-dialog modal-dialog-centered ">
                 <div class="modal-content" style=" width: auto;">
-                  <button type="button" id="btn-modal-close" class="btn-close m-1" data-bs-dismiss="modal" aria-label="Close"></button>
-                  <h3 class="text-center m-0" id="form-title"></h3>
+                  <div class="modal-header py-2 justify-content-between">
+                    <h4 class="fs-5 m-0" id="form-title"></h4>
+                    <button type="button" id="btn-modal-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
                   <div class="modal-body m-0">
                     <form class="form-modal row p-1">
                       @csrf
@@ -78,9 +80,11 @@
                         <label for="employees" class="form-label employee-label fw-bold d-none ">Employees:</label>
                         <input type="hidden" class=" form-control py-1" id="employees" disabled>
                       </div>
-
-                      <button type="submit" class="col-3 btn btn-primary mt-3 p-0 border-0 " style="height: 40px; margin-left: 73%;" id="btn-submit"></button>
-                    </form>
+                      
+                      <div class="modal-footer py-0 border-0 ">
+                        <button type="submit" class="btn btn-primary rounded-2 px-3 py-1 m-0 " id="btn-submit"></button>
+                      </div>
+                     </form>
                   </div>
                 </div>
               </div>

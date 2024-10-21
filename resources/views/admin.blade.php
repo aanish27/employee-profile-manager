@@ -47,8 +47,10 @@
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
                     <div class="modal-dialog modal-dialog-centered ">
                       <div class="modal-content " style=" width: auto;">
-                        <button type="button" id="btn-modal-close" class="btn-close m-2 text-bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <h3 class="text-center m-0" id="form-title"></h3>
+                        <div class="modal-header py-2 justify-content-between">
+                             <h4 class="fs-5 m-0" id="form-title"></h4>
+                            <button type="button" id="btn-modal-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
                         <div class="modal-body m-0">
                             <form class="form-modal row  p-1">
                                 @csrf
@@ -115,7 +117,9 @@
                                     <label class="form-label fw-bold" for="account-no">Account No:</label>
                                     <input type="number" class=" form-control py-1 " id="account-no" name="account_no" placeholder="Account No" required>
                                 </div>
-                                <button type="submit" class="col-3 btn btn-primary mt-3 p-0 border-0 " style="height: 40px; margin-left: 74%;" id="btn-submit"></button>
+                                <div class="modal-footer py-0 border-0 ">
+                                    <button type="submit" class="btn btn-primary rounded-2 px-3 py-1 m-0 " id="btn-submit"></button>
+                                </div>
                             </form>
                         </div>
                       </div>
@@ -231,7 +235,7 @@
                         {
                             data: 'dob',
                             title:'DOB' ,
-                            width: '6%' ,
+
                         },
                         {
                             data: 'email' ,
@@ -288,7 +292,7 @@
                 function storeEmployee(){
                     $('.form-modal').attr("id","form-create");
                     $('#form-title').text("New Employee Details");
-                    $('#btn-submit').text("Add Employee");
+                    $('#btn-submit').text("Save");
                     $('.trash').toggleClass("d-none" , true);
                 };
 
@@ -314,7 +318,7 @@
                 $('#myTable tbody').on('click', '.btn-edit', function (e) {
                     $('.form-modal').attr("id","form-edit");
                     $('#form-title').text("Edit Employee Details");
-                    $('#btn-submit').text("Update Employee");
+                    $('#btn-submit').text("Update");
                     $('.trash').toggleClass("d-none" , true);
 
                     id = table.row( $(this).parents('tr') ).data().id;
