@@ -6,7 +6,7 @@
             </svg>
         </button>
 
-         <h1 class="fs-5" >Manage Employee Profiles</h1>
+         <h1 class="fs-5" >{{ $title }}</h1>
     </div>
 
     <div class="nav-right d-flex align-items-center gap-2 ">

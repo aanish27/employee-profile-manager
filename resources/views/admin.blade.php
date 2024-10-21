@@ -14,7 +14,7 @@
     <body class="container.fluid w-100 m-0 d-flex  " style="background-color: whitesmoke">
         <x-sidebar/>
         <div class="content w-100">
-            <x-nav-bar/>
+            <x-nav-bar title="Employee Manager"/>
             <div class="toast-container position-absolute top-0 end-0  m-2">
                 <div id="success-toast" class="toast success-toast align-items-center bg-success-subtle  shadow-sm " role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
@@ -134,24 +134,22 @@
                           This Action wil Delete Employee and the records related to him Such as Bank Account of the employee
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" id="btn-dlt"  class="btn btn-danger btn-dlt">Delete</button>
+                          <button type="button" id="btn-dlt"  class="btn btn-dlt btn-danger rounded-2 px-3 py-0">Delete</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm "  data-turbolinks="false"></table>
+                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  style="100%;"></table>
             </main>
         </div>
 
         <script type="module">
             $(function(){
                 let table = $('#myTable').DataTable({
-                    fixedColumns: true,
                     scrollCollapse: true,
-                    scrollY: 500,
                     scrollX: true,
+                    scrollY: 500,
                     responsive: true,
                     layout: {
                         topStart: null,
