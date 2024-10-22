@@ -61,12 +61,12 @@
                       </div>
 
                       <div class="mb-2 col-6">
-                        <label for="branch" class="form-label fw-bold ">Branch:</label>
+                        <label for="branch" class="form-label fw-bold ">Country:</label>
                         <input type="text" class=" form-control py-1" id="country" name="country" placeholder="Country">
                       </div>
 
                       <div class="mb-2 col-6">
-                        <label for="branch" class="form-label fw-bold ">Branch:</label>
+                        <label for="branch" class="form-label fw-bold ">Address:</label>
                         <input type="text" class=" form-control py-1" id="address" name="address" placeholder="Address">
                       </div>
 
