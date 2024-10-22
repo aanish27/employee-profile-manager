@@ -138,7 +138,7 @@
                               id: 'btn-add-record',
                               'data-bs-toggle': 'modal',
                               'data-bs-target': '.modal',
-                              class: 'bi bi-plus-lg btn btn-outline-primary rounded-2 px-3 py-0 mt-4' ,
+                              class: 'bi bi-plus-lg btn btn-outline-primary rounded-2 px-3 py-0' ,
                           },
                           action: function (e, dt, node, config, cb) {
                               storeCompany()
@@ -205,7 +205,7 @@
               ],
                columnDefs: [{ orderable: false, targets: 0 }],
             });
-       
+
             // sidebar
             $('#sidebar-toggle').on('click', function() {
                 $('#sidebar-long').toggleClass('d-none');
