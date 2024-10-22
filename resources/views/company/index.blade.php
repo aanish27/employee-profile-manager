@@ -203,10 +203,9 @@
                   title:'Projects',
                 },
               ],
+               columnDefs: [{ orderable: false, targets: 0 }],
             });
-            table.columns.adjust().draw();
-
-
+       
             // sidebar
             $('#sidebar-toggle').on('click', function() {
                 $('#sidebar-long').toggleClass('d-none');

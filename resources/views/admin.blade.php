@@ -255,6 +255,7 @@
                             title:'Bank Acc' ,
                         },
                     ],
+                    columnDefs: [{ orderable: false, targets: 0 }],
                 });
 
 

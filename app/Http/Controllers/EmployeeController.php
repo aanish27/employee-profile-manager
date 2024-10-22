@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
+use function PHPUnit\Framework\isNull;
+
 class EmployeeController extends Controller
 {
     public function index(Request $request){
@@ -20,43 +22,51 @@ class EmployeeController extends Controller
 
     public function draw(Request $request){
 
-          //SERVER SIDE RENDERING HANDLE FOR data table
-          $search = $request->query('search')['value'];
-          $draw = $request->query('draw', 1);
-          $start = $request->query('start', 0);
-          $length = $request->query('length', 10);
-          $totalEmployees =   Employee::count();
+        //SERVER SIDE RENDERING HANDLE FOR data table
+        $search = $request->query('search')['value'];
+        $draw = $request->query('draw', 1);
+        $start = $request->query('start', 0);
+        $length = $request->query('length', 10);
+        $totalEmployees =   Employee::count();
+        $arrayColumns = ['','company.name', 'company.branch', 'name', 'position', 'dob', 'email', 'phone', 'address', 'bankAccount.account_no'];
 
-          $employees = Employee::with(['bankAccount' , 'company' => function($query) {
-                                 $query->withTrashed();
-                                }])
-                              ->where('name' , 'like' , "%".$search."%")
-                              ->orWhere('position' ,'like' , "%".$search."%")
-                              ->orWhere('email', 'like' , "%".$search."%")
-                              ->orWhere('address' ,'like' , "%".$search."%")
-                              ->orWhere('dob' ,'like' , "%".$search."%")
-                              ->orWhere('phone' ,'like' , "%".$search."%")
-                              ->orWhereHas('bankAccount',
-                              function ($q) use ($search) {
-                                  $q->where('account_no', 'like', "%".$search."%")->select('branch'); })
-                              ->orWhereHas('company', function ($q) use ($search) {
-                                  $q->withTrashed()
-                                  ->where('name', 'like', "%".$search."%")
-                                  ->orWhere('branch', 'like', "%".$search."%");
-                                });
+        $employees = Employee::with(['bankAccount' , 'company' => function($query) {
+                                $query->withTrashed();
+                            }])
+                            ->where('name' , 'like' , "%".$search."%")
+                            ->orWhere('position' ,'like' , "%".$search."%")
+                            ->orWhere('email', 'like' , "%".$search."%")
+                            ->orWhere('address' ,'like' , "%".$search."%")
+                            ->orWhere('dob' ,'like' , "%".$search."%")
+                            ->orWhere('phone' ,'like' , "%".$search."%")
+                            ->orWhereHas('bankAccount',
+                            function ($q) use ($search) {
+                                $q->where('account_no', 'like', "%".$search."%")->select('branch'); })
+                            ->orWhereHas('company', function ($q) use ($search) {
+                                $q->withTrashed()
+                                ->where('name', 'like', "%".$search."%")
+                                ->orWhere('branch', 'like', "%".$search."%");
+                            });
 
-          $filteredEmployees = $search ? $employees->count() : $totalEmployees;
-          $employees = $employees->skip($start)
-                                  ->take($length)
-                                  ->get();
+        $filteredEmployees = $search ? $employees->count() : $totalEmployees;
+        $employees = $employees->skip($start)
+                                ->take($length)
+                                ->get();
 
-          $response = [
-              'draw' => intval($draw),
-              'recordsTotal' => intval($totalEmployees),
-              'recordsFiltered' => $filteredEmployees,
-              'data' => $employees
-          ];
-          return Response::json($response);
+        if(!is_null($request->query('order'))){
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            $employees = ($orderDir == 'desc') ? $employees->sortByDesc($arrayColumns[$num])->values() : $employees->sortBy($arrayColumns[$num])->values();
+        };
+
+        $response = [
+            'draw' => intval($draw),
+            'recordsTotal' => intval($totalEmployees),
+            'recordsFiltered' => $filteredEmployees,
+            'data' => $employees
+
+        ];
+        return Response::json($response);
     }
 
 

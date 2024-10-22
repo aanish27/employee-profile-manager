@@ -21,6 +21,7 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
+        $arrayColumns = ['', 'name', 'branch','country', 'address', 'employees_count', 'projects_count'];
 
         $companys = Company::where('name' , 'like' , "%".$search."%")
                             ->orWhere('country' ,'like' , "%".$search."%")
@@ -30,7 +31,14 @@ class CompanyController extends Controller
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)
                                 ->take($length)
-                                ->withCount('projects','employees')->get();
+                                ->withCount('employees','projects')->get();
+
+
+        if (!is_null($request->query('order'))) {
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            $companys = ($orderDir == 'desc') ? $companys->sortByDesc($arrayColumns[$num])->values() : $companys->sortBy($arrayColumns[$num])->values();
+        };
 
         $response = [
             'draw' => intval($draw),
