@@ -152,7 +152,7 @@
                 let table = $('#myTable').DataTable({
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 500,
+                    scrollY: 740,
                     responsive: true,
                     layout: {
                         topStart: null,
