@@ -85,7 +85,7 @@
                                     <select id="select" name="company_id" class="form-select form-control py-1  " aria-label="Default select example">
                                         <option hidden>Company</option>
                                         @foreach ( $companies  as $company )
-                                            <option value="{{ $company->id }}"  class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
+                                            <option value="{{ $company->id }}" data-val="{{ $company->name }}" class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -144,12 +144,50 @@
                   </div>
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  style="100%;"></table>
+
+                <select id="filter-position" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
+                    <option hidden>Position</option>
+                    @foreach ( $positions  as $position )
+                        <option value="{{ $position }}" class="" > {{ $position }} </option>
+                    @endforeach
+                </select>
+
             </main>
         </div>
 
         <script type="module">
             $(function(){
                 let table = $('#myTable').DataTable({
+                    orderCellsTop: true,
+                    initComplete: function() {
+                        const table = this.api();
+                        const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
+
+                        table.columns().every(function() {
+                            table.search('');
+                            const column = this;
+                            switch (this.index()) {
+                                case 1:
+                                    $('#select').clone().attr("id","filter-company")
+                                    .appendTo(appendPosition)
+                                    .on('change', function() {
+                                        const val = $(this).find(":selected").data("val");
+                                        column.search(val).draw();
+                                    });
+                                    break;
+
+                                case 4:
+                                    $("#filter-position").detach().appendTo(appendPosition)
+                                    .removeClass('d-none')
+                                    .on('change', function() {
+                                        column.search( $(this).val()).draw();
+                                    });
+                                    break;
+                                default:
+                                    return;
+                            }
+                        });
+                    },
                     scrollCollapse: true,
                     scrollX: true,
                     scrollY: 740,
