@@ -41,7 +41,7 @@
         <main class="container.fluid">
           <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
-              <div class="modal-dialog modal-dialog-centered ">
+              <div class="modal-dialog ">
                 <div class="modal-content" style=" width: auto;">
                   <div class="modal-header py-2 justify-content-between">
                     <h4 class="fs-5 m-0" id="form-title"></h4>
