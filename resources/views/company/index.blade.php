@@ -109,12 +109,38 @@
               </div>
             </div>
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm "  data-turbolinks="false"></table>
+            <select id="filter-country" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
+                      <option hidden>Country</option>
+                      @foreach ( $countries  as $country )
+                          <option value="{{ $country }}" class="" > {{ $country }} </option>
+                      @endforeach
+            </select>
         </main>
       </div>
 
       <script type="module">
         $(function () {
           let table= $('#myTable').DataTable({
+             initComplete: function() {
+                        const table = this.api();
+                        const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
+
+                        table.columns().every(function() {
+                            table.search('');
+                            const column = this;
+                            switch (this.index()) {
+                                case 3:
+                                    $("#filter-country").detach().appendTo(appendPosition)
+                                    .removeClass('d-none')
+                                    .on('change', function() {
+                                        column.search( $(this).val()).draw();
+                                    });
+                                    break;
+                                default:
+                                    return;
+                            }
+                        });
+                    },
                 fixedColumns: true,
                 scrollCollapse: true,
                 scrollY: 500,
