@@ -9,7 +9,10 @@ window.jQuery = window.$ = $;
 import DataTable from 'datatables.net-bs5';
 window.DataTable = DataTable;
 
-import "bootstrap-icons/font/bootstrap-icons.css"
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-bs5/css/dataTables.bootstrap5.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import 'datatables.net-fixedcolumns-bs5';
 import 'datatables.net-fixedcolumns-bs5';
 import 'datatables.net-buttons';
 import 'datatables.net-buttons-bs5';

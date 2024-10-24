@@ -7,7 +7,6 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css' ])
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
     </head>
 
     <body class="container.fluid w-100 d-flex " style="background-color: rgb(249, 249, 249) ">

@@ -7,7 +7,6 @@
         <title>Employee Manager</title>
 
         @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css' ])
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
     </head>
 
     <body class="container.fluid w-100 m-0 d-flex  " style="background-color: whitesmoke">
@@ -412,7 +411,6 @@
                     if ($(this).val() != '10') {
                         $('.dt-scroll-headInner').attr('style', 'width: 99% !important');
                     }
-
                 });
 
                 //Toast Alerts
