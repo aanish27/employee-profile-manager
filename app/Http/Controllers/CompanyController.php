@@ -12,7 +12,8 @@ class CompanyController extends Controller
     public function index()
     {
         $companys = Company::all();
-        return view('company.index', ['companys' => $companys]);
+        $countries = Company::pluck('country');
+        return view('company.index', ['companys' => $companys , 'countries' => $countries]);
     }
 
     public function draw(Request $request){
@@ -21,16 +22,39 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
+        $arrayColumns = ['', 'name', 'branch','country', 'address', 'employees_count', 'projects_count'];
+        $arr = array();
 
-        $companys = Company::where('name' , 'like' , "%".$search."%")
-                            ->orWhere('country' ,'like' , "%".$search."%")
-                            ->orWhere('branch', 'like' , "%".$search."%")
-                            ->orWhere('address' ,'like' , "%".$search."%");
+        if (is_null($search)) {
+            for ($x = 0; $x <= 6; $x++) {
+                if (!is_null($request->query('columns')[$x]['search']['value'])) {
+                    $arr[$x] = $request->query('columns')[$x]['search']['value'];
+                };
+            }
+        }
+
+        if(!empty($arr)){
+            $searchCountry = empty($arr) ? $search : (array_key_exists(3, $arr) ? $arr[3] : null);
+            $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
+
+        }else{
+            $companys = Company::where('name', 'like', "%" . $search . "%")
+                ->orWhere('country', 'like', "%" . $search . "%")
+                ->orWhere('branch', 'like', "%" . $search . "%")
+                ->orWhere('address', 'like', "%" . $search . "%");
+        }
 
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)
                                 ->take($length)
-                                ->withCount('projects','employees')->get();
+                                ->withCount('employees','projects')->get();
+
+
+        if (!is_null($request->query('order'))) {
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            $companys = ($orderDir == 'desc') ? $companys->sortByDesc($arrayColumns[$num])->values() : $companys->sortBy($arrayColumns[$num])->values();
+        };
 
         $response = [
             'draw' => intval($draw),

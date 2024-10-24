@@ -6,15 +6,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Employee Manager</title>
 
-
         @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css' ])
-
     </head>
 
     <body class="container.fluid w-100 m-0 d-flex  " style="background-color: whitesmoke">
         <x-sidebar/>
         <div class="content w-100">
-            <x-nav-bar/>
+            <x-nav-bar title="Employee Manager"/>
             <div class="toast-container position-absolute top-0 end-0  m-2">
                 <div id="success-toast" class="toast success-toast align-items-center bg-success-subtle  shadow-sm " role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
@@ -42,14 +40,15 @@
             </div>
 
             <main class="container.fluid" >
-                <h1 class="fs-4 bg-white shadow-sm py-2" >Manage Employee Profiles</h1>
 
                 <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
-                    <div class="modal-dialog modal-dialog-centered ">
+                    <div class="modal-dialog ">
                       <div class="modal-content " style=" width: auto;">
-                        <button type="button" id="btn-modal-close" class="btn-close m-2 text-bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <h3 class="text-center m-0" id="form-title"></h3>
+                        <div class="modal-header py-2 justify-content-between">
+                             <h4 class="fs-5 m-0" id="form-title"></h4>
+                            <button type="button" id="btn-modal-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
                         <div class="modal-body m-0">
                             <form class="form-modal row  p-1">
                                 @csrf
@@ -85,7 +84,7 @@
                                     <select id="select" name="company_id" class="form-select form-control py-1  " aria-label="Default select example">
                                         <option hidden>Company</option>
                                         @foreach ( $companies  as $company )
-                                            <option value="{{ $company->id }}"  class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
+                                            <option value="{{ $company->id }}" data-val="{{ $company->name }}" class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -116,7 +115,9 @@
                                     <label class="form-label fw-bold" for="account-no">Account No:</label>
                                     <input type="number" class=" form-control py-1 " id="account-no" name="account_no" placeholder="Account No" required>
                                 </div>
-                                <button type="submit" class="col-3 btn btn-primary mt-3 p-0 border-0 " style="height: 40px; margin-left: 74%;" id="btn-submit"></button>
+                                <div class="modal-footer py-0 border-0 ">
+                                    <button type="submit" class="btn btn-primary rounded-2 px-3 py-1 m-0 " id="btn-submit"></button>
+                                </div>
                             </form>
                         </div>
                       </div>
@@ -135,24 +136,71 @@
                           This Action wil Delete Employee and the records related to him Such as Bank Account of the employee
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" id="btn-dlt"  class="btn btn-danger btn-dlt">Delete</button>
+                          <button type="button" id="btn-dlt"  class="btn btn-dlt btn-danger rounded-2 px-3 py-0">Delete</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                <table id="myTable" class="table table-hover table-nowrap  shadow-sm "  data-turbolinks="false"></table>
+                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  style="100%;"></table>
+
+                <select id="filter-position" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
+                    <option hidden>Position</option>
+                    @foreach ( $positions  as $position )
+                        <option value="{{ $position }}" class="" > {{ $position }} </option>
+                    @endforeach
+                </select>
+
             </main>
         </div>
 
         <script type="module">
             $(function(){
                 let table = $('#myTable').DataTable({
-                    fixedColumns: true,
+                    orderCellsTop: true,
+                    initComplete: function() {
+                        const table = this.api();
+                        const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
+
+                        table.columns().every(function() {
+                            table.search('');
+                            const column = this;
+                            switch (this.index()) {
+                                case 1:
+                                    $('#select').clone().attr("id","filter-company").css("width" , "200px")
+                                    .appendTo(appendPosition)
+                                    .on('change', function() {
+                                        const val = $(this).find(":selected").data("val");
+                                        column.search(val).draw();
+                                    });
+                                    break;
+
+                                case 4:
+                                    $("#filter-position").detach().appendTo(appendPosition)
+                                    .removeClass('d-none')
+                                    .on('change', function() {
+                                        column.search( $(this).val()).draw();
+                                    });
+                                    break;
+                                default:
+                                    return;
+                            }
+                        });
+
+                        let btn = $('<button class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>')
+                        .appendTo(appendPosition)
+                        .css('width', '70px');
+                        
+                        $(btn).click(function (e) {
+                            $('#filter-company option:selected').prop("selected" , false);
+                            $('#filter-position option:selected').prop("selected" , false);
+                            table.columns().search('').draw();
+                        });
+
+                    },
                     scrollCollapse: true,
-                    scrollY: 500,
                     scrollX: true,
+                    scrollY: 740,
                     responsive: true,
                     layout: {
                         topStart: null,
@@ -167,11 +215,12 @@
                         },
                         top1End:{
                             buttons: [{
-                                text: '<i class="bi bi-plus-lg" ></i> New',
+                                text: 'New',
                                 attr: {
                                     id: 'btn-add-record',
                                     'data-bs-toggle': 'modal',
                                     'data-bs-target': '.modal',
+                                    class: 'bi bi-plus-lg btn btn-outline-primary rounded-2 px-3 py-0' ,
                                 },
                                 action: function (e, dt, node, config, cb) {
                                     storeEmployee()
@@ -193,20 +242,20 @@
                             data: null ,
                             title: "Actions",
                             render: function (data, type, row) {
-                                return `  <button class="d-inline btn  btn-edit p-0 " id="btn-edit-${row.id}" data-id="${row.id}" data-bs-toggle="modal" data-bs-target=".modal" >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#1DB954" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                return `  <button title="Edit" class="d-inline btn  btn-edit p-0 " id="btn-edit-${row.id}" data-id="${row.id}" data-bs-toggle="modal" data-bs-target=".modal" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1DB954" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                             </svg>
                                           </button>
-                                           <button class="btn btn-dlt-modal p-0 d-inline" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#deletConfirmation" >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                                           <button title="Delete" class="btn btn-dlt-modal d-inline p-0 ms-2" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#deletConfirmation" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                                             </svg>
                                         </button> `
                             },
-                            width: '8%',
+
                         },
                         {
                             data: 'company.name',
@@ -215,9 +264,10 @@
 
                         },
                         {
+
                             data: 'company.branch',
                             title:'Branch' ,
-                            render: DataTable.render.ellipsis( 20 )
+                            render: DataTable.render.ellipsis( 20 ),
 
                         },
                         {
@@ -233,7 +283,7 @@
                         {
                             data: 'dob',
                             title:'DOB' ,
-                            width: '6%' ,
+
                         },
                         {
                             data: 'email' ,
@@ -253,6 +303,7 @@
                             title:'Bank Acc' ,
                         },
                     ],
+                    columnDefs: [{ orderable: false, targets: 0 }],
                 });
 
 
@@ -290,7 +341,7 @@
                 function storeEmployee(){
                     $('.form-modal').attr("id","form-create");
                     $('#form-title').text("New Employee Details");
-                    $('#btn-submit').text("Add Employee");
+                    $('#btn-submit').text("Save");
                     $('.trash').toggleClass("d-none" , true);
                 };
 
@@ -316,7 +367,7 @@
                 $('#myTable tbody').on('click', '.btn-edit', function (e) {
                     $('.form-modal').attr("id","form-edit");
                     $('#form-title').text("Edit Employee Details");
-                    $('#btn-submit').text("Update Employee");
+                    $('#btn-submit').text("Update");
                     $('.trash').toggleClass("d-none" , true);
 
                     id = table.row( $(this).parents('tr') ).data().id;
@@ -365,6 +416,12 @@
                 // Set Branch on Selct
                 $('#select').on('click' , function (e) {
                     $('#company-branch').val($(this).find(':selected').data('branch'))
+                });
+
+                $('#dt-length-0').change(function() {
+                    if ($(this).val() != '10') {
+                        $('.dt-scroll-headInner').attr('style', 'width: 99% !important');
+                    }
                 });
 
                 //Toast Alerts
