@@ -167,7 +167,7 @@
                             const column = this;
                             switch (this.index()) {
                                 case 1:
-                                    $('#select').clone().attr("id","filter-company")
+                                    $('#select').clone().attr("id","filter-company").css("width" , "200px")
                                     .appendTo(appendPosition)
                                     .on('change', function() {
                                         const val = $(this).find(":selected").data("val");
@@ -186,6 +186,17 @@
                                     return;
                             }
                         });
+
+                        let btn = $('<button class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>')
+                        .appendTo(appendPosition)
+                        .css('width', '70px');
+                        
+                        $(btn).click(function (e) {
+                            $('#filter-company option:selected').prop("selected" , false);
+                            $('#filter-position option:selected').prop("selected" , false);
+                            table.columns().search('').draw();
+                        });
+
                     },
                     scrollCollapse: true,
                     scrollX: true,

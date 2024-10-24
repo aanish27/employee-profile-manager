@@ -139,6 +139,15 @@
                                     return;
                             }
                         });
+
+                        let btn = $('<button class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>')
+                        .appendTo(appendPosition)
+                        .css('width', '70px');
+
+                        $(btn).click(function (e) {
+                            $('#filter-country option:selected').prop("selected" , false);
+                            table.columns().search('').draw();
+                        });
                     },
                 fixedColumns: true,
                 scrollCollapse: true,
