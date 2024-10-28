@@ -44,17 +44,18 @@ class CompanyController extends Controller
                 ->orWhere('address', 'like', "%" . $search . "%");
         }
 
+        if (!is_null($request->query('order'))) {
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            if (!$num == 0) {
+                $companys = ($orderDir == 'desc') ? $companys->orderBy($arrayColumns[$num], $orderDir) : $companys->orderBy($arrayColumns[$num], $orderDir);
+            }
+        };
+
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)
                                 ->take($length)
                                 ->withCount('employees','projects')->get();
-
-
-        if (!is_null($request->query('order'))) {
-            $num = $request->query('order')['0']['column'];
-            $orderDir = $request->query('order')['0']['dir'];
-            $companys = ($orderDir == 'desc') ? $companys->sortByDesc($arrayColumns[$num])->values() : $companys->sortBy($arrayColumns[$num])->values();
-        };
 
         $response = [
             'draw' => intval($draw),
