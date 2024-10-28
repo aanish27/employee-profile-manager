@@ -29,8 +29,10 @@ class EmployeeController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalEmployees =   Employee::count();
-        $arrayColumns = ['','company.name', 'company.branch', 'name', 'position', 'dob', 'email', 'phone', 'address', 'bankAccount.account_no'];
+        $arrayColumns = ['', 'company_name', 'branch', 'name', 'position', 'dob', 'email', 'phone', 'address', 'account_no'];
         $arr = array();
+
+        //checking if dropdown filter is filled
         if(is_null($search)){
             for ($x = 0; $x <= 9; $x++) {
                 if(!is_null($request->query('columns')[$x]['search']['value'])){
@@ -39,27 +41,29 @@ class EmployeeController extends Controller
             }
         }
 
+        //dropdown filter not null
         if(!empty($arr)){
             $searchPosition = empty($arr) ? $search : (array_key_exists(4, $arr) ? $arr[4] : null);
             $searchCompany = empty($arr) ? $search : (array_key_exists(1, $arr) ? $arr[1] : null);
-            $employees = Employee::with(['bankAccount', 'company' => function ($query) {
-                $query->withTrashed();
-            }])
-                ->where('position', 'like', "%" . $searchPosition . "%")
-                ->whereHas('company', function ($q) use ($searchCompany) {
-                    $q->withTrashed()
-                        ->where('name', 'like', "%" . $searchCompany . "%");
+            $employees = Employee::select('employees.*' , 'companies.name as company_name' ,'companies.branch', 'companies.deleted_at as company_deleted_at' , 'bank_accounts.account_no')
+                ->join('companies', 'employees.company_id', '=', 'companies.id')
+                ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id')
+                ->where('employees.position', 'like', "%" . $searchPosition . "%")
+                ->where('companies.name', 'like', "%" . $searchCompany . "%")
+                ->whereHas('company', function ($q) use($searchCompany){
+                    $q->withTrashed();
                 });
-            }else{
-            $employees = Employee::with(['bankAccount', 'company' => function ($query) {
-                $query->withTrashed();
-            }])
-                ->where('name', 'like', "%" . $search . "%")
-                ->orWhere('position', 'like', "%" . $search . "%")
-                ->orWhere('email', 'like', "%" . $search . "%")
-                ->orWhere('address', 'like', "%" . $search . "%")
-                ->orWhere('dob', 'like', "%" . $search . "%")
-                ->orWhere('phone', 'like', "%" . $search . "%")
+            }//dropdown filter null
+            else{
+            $employees = Employee::select('employees.*', 'companies.name as company_name', 'companies.branch', 'companies.deleted_at as company_deleted_at', 'bank_accounts.account_no')
+                ->join('companies', 'employees.company_id', '=', 'companies.id')
+                ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id')
+                ->where('employees.name', 'like', "%" . $search . "%")
+                ->orWhere('employees.position', 'like', "%" . $search . "%")
+                ->orWhere('employees.email', 'like', "%" . $search . "%")
+                ->orWhere('employees.address', 'like', "%" . $search . "%")
+                ->orWhere('employees.dob', 'like', "%" . $search . "%")
+                ->orWhere('employees.phone', 'like', "%" . $search . "%")
                 ->orWhereHas(
                     'bankAccount',
                     function ($q) use ($search) {
@@ -68,32 +72,50 @@ class EmployeeController extends Controller
                 )
                 ->orWhereHas('company', function ($q) use ($search) {
                     $q->withTrashed()
-                        ->where('name', 'like', "%" . $search . "%")
-                        ->orWhere('branch', 'like', "%" . $search . "%");
+                        ->where('companies.name', 'like', "%" . $search . "%")
+                        ->orWhere('companies.branch', 'like', "%" . $search . "%");
                 });
-
         }
+
+        #column ordering
+        if (!is_null($request->query('order'))) {
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            if(!$num == 0){
+                $employees = ($orderDir == 'desc') ? $employees->orderBy($arrayColumns[$num], $orderDir) : $employees->orderBy($arrayColumns[$num], $orderDir);
+            }
+        };
 
         $filteredEmployees = $search ? $employees->count() : $totalEmployees;
         $employees = $employees->skip($start)
                                 ->take($length)
                                 ->get();
 
-        if(!is_null($request->query('order'))){
-            $num = $request->query('order')['0']['column'];
-            $orderDir = $request->query('order')['0']['dir'];
-            $employees = ($orderDir == 'desc') ? $employees->sortByDesc($arrayColumns[$num])->values() : $employees->sortBy($arrayColumns[$num])->values();
-        };
-
         $response = [
             'draw' => intval($draw),
             'recordsTotal' => intval($totalEmployees),
             'recordsFiltered' => $filteredEmployees,
             'data' => $employees
-
         ];
+
         return Response::json($response);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function store(Request $request){
