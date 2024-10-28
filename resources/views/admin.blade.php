@@ -142,7 +142,7 @@
                     </div>
                   </div>
 
-                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  style="100%;"></table>
+                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
                 <select id="filter-position" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
                     <option hidden>Position</option>
@@ -158,6 +158,7 @@
             $(function(){
                 let table = $('#myTable').DataTable({
                     orderCellsTop: true,
+                    pageResize: true,
                     initComplete: function() {
                         const table = this.api();
                         const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
@@ -200,7 +201,7 @@
                     },
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 740,
+                    scrollY: 720,
                     responsive: true,
                     layout: {
                         topStart: null,
@@ -296,16 +297,19 @@
                             title:'Bank Acc' ,
                         },
                     ],
-                    columnDefs: [{ orderable: false, targets: 0 }],
+                    columnDefs: [
+                        { orderable: false, targets: 0 },
+                        { className: 'dt-head-left py-0', targets: '_all' },
+                    ],
                 });
-
 
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {
                     $('#sidebar-long').toggleClass('d-none');
+                    $('main').toggleClass('main-l-sidebar');
                     $('#sidebar-short').toggleClass('d-none');
                     table.columns.adjust();
-
+                    table.responsive.recalc();
                 });
 
                 const linkColor = $('.nav_link');
@@ -337,8 +341,6 @@
                     $('#btn-submit').text("Save");
                     $('.trash').toggleClass("d-none" , true);
                 };
-
-
 
                 $('.modal-body').on('submit' , '#form-create', function (e){
                     e.preventDefault();
@@ -409,12 +411,6 @@
                 // Set Branch on Selct
                 $('#select').on('click' , function (e) {
                     $('#company-branch').val($(this).find(':selected').data('branch'))
-                });
-
-                $('#dt-length-0').change(function() {
-                    if ($(this).val() != '10') {
-                        $('.dt-scroll-headInner').attr('style', 'width: 99% !important');
-                    }
                 });
 
                 //Toast Alerts
