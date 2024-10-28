@@ -41,13 +41,15 @@ class EmployeeController extends Controller
             }
         }
 
+         $employees = Employee::select('employees.*' , 'companies.name as company_name' ,'companies.branch', 'companies.deleted_at as company_deleted_at' , 'bank_accounts.account_no')
+                ->join('companies', 'employees.company_id', '=', 'companies.id')
+                ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id');
+
         //dropdown filter not null
         if(!empty($arr)){
             $searchPosition = empty($arr) ? $search : (array_key_exists(4, $arr) ? $arr[4] : null);
             $searchCompany = empty($arr) ? $search : (array_key_exists(1, $arr) ? $arr[1] : null);
-            $employees = Employee::select('employees.*' , 'companies.name as company_name' ,'companies.branch', 'companies.deleted_at as company_deleted_at' , 'bank_accounts.account_no')
-                ->join('companies', 'employees.company_id', '=', 'companies.id')
-                ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id')
+            $employees
                 ->where('employees.position', 'like', "%" . $searchPosition . "%")
                 ->where('companies.name', 'like', "%" . $searchCompany . "%")
                 ->whereHas('company', function ($q) use($searchCompany){
@@ -55,9 +57,7 @@ class EmployeeController extends Controller
                 });
             }//dropdown filter null
             else{
-            $employees = Employee::select('employees.*', 'companies.name as company_name', 'companies.branch', 'companies.deleted_at as company_deleted_at', 'bank_accounts.account_no')
-                ->join('companies', 'employees.company_id', '=', 'companies.id')
-                ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id')
+            $employees
                 ->where('employees.name', 'like', "%" . $search . "%")
                 ->orWhere('employees.position', 'like', "%" . $search . "%")
                 ->orWhere('employees.email', 'like', "%" . $search . "%")
