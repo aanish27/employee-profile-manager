@@ -29,7 +29,6 @@ class EmployeeController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalEmployees =   Employee::count();
-        $arrayColumns = ['', 'company_name', 'branch', 'name', 'position', 'dob', 'email', 'phone', 'address', 'account_no'];
         $arr = array();
 
         //checking if dropdown filter is filled
@@ -43,8 +42,9 @@ class EmployeeController extends Controller
 
         //dropdown filter not null
         if(!empty($arr)){
-            $searchPosition = empty($arr) ? $search : (array_key_exists(4, $arr) ? $arr[4] : null);
-            $searchCompany = empty($arr) ? $search : (array_key_exists(1, $arr) ? $arr[1] : null);
+            $searchPosition = array_key_exists(4, $arr) ? $arr[4] : null;
+            $searchCompany = array_key_exists(1, $arr) ? $arr[1] : null;
+
             $employees = Employee::select('employees.*' , 'companies.name as company_name' ,'companies.branch', 'companies.deleted_at as company_deleted_at' , 'bank_accounts.account_no')
                 ->join('companies', 'employees.company_id', '=', 'companies.id')
                 ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id')
@@ -82,7 +82,9 @@ class EmployeeController extends Controller
             $num = $request->query('order')['0']['column'];
             $orderDir = $request->query('order')['0']['dir'];
             if(!$num == 0){
-                $employees = ($orderDir == 'desc') ? $employees->orderBy($arrayColumns[$num], $orderDir) : $employees->orderBy($arrayColumns[$num], $orderDir);
+                $employees = ($orderDir == 'desc')
+                        ? $employees->orderBy($request->query('columns')[$num]['data'], $orderDir)
+                        : $employees->orderBy($request->query('columns')[$num]['data'], $orderDir);
             }
         };
 

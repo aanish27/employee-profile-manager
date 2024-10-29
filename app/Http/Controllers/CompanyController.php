@@ -22,7 +22,6 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
-        $arrayColumns = ['', 'name', 'branch','country', 'address', 'employees_count', 'projects_count'];
         $arr = array();
 
         if (is_null($search)) {
@@ -34,7 +33,7 @@ class CompanyController extends Controller
         }
 
         if(!empty($arr)){
-            $searchCountry = empty($arr) ? $search : (array_key_exists(3, $arr) ? $arr[3] : null);
+            $searchCountry = array_key_exists(3, $arr) ? $arr[3] : null;
             $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
 
         }else{
@@ -48,7 +47,9 @@ class CompanyController extends Controller
             $num = $request->query('order')['0']['column'];
             $orderDir = $request->query('order')['0']['dir'];
             if (!$num == 0) {
-                $companys = ($orderDir == 'desc') ? $companys->orderBy($arrayColumns[$num], $orderDir) : $companys->orderBy($arrayColumns[$num], $orderDir);
+                $companys = ($orderDir == 'desc')
+                        ? $companys->orderBy($request->query('columns')[$num]['data'], $orderDir)
+                        : $companys->orderBy($request->query('columns')[$num]['data'], $orderDir);
             }
         };
 
