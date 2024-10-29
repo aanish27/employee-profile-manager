@@ -108,7 +108,7 @@
               </div>
             </div>
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
-            <select id="filter-country" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
+            <select id="filter-country" class="form-select form-control form-control-sm py-0 px-1 d-none" style="width: 150px" aria-label="Default select example">
                       <option hidden>Country</option>
                       @foreach ( $countries  as $country )
                           <option value="{{ $country }}" class="" > {{ $country }} </option>
@@ -120,7 +120,6 @@
       <script type="module">
         $(function () {
           let table= $('#myTable').DataTable({
-            orderCellsTop: true,
             pageResize: true,
             initComplete: function() {
                       const table = this.api();
@@ -160,6 +159,8 @@
               topStart: null,
               topEnd: null,
               top1Start:{
+              },
+              top0Start:{
                   pageLength: {
                   placeholder: 'Filter'
                   },
@@ -167,7 +168,7 @@
                       placeholder: 'Type search here'
                   },
               },
-              top1End:{
+              top0End:{
                   buttons: [{
                       text: 'New',
                       attr: {

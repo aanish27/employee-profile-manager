@@ -144,7 +144,7 @@
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
-                <select id="filter-position" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
+                <select id="filter-position" class="form-select form-control form-control-sm py-0 px-1 d-none" style="width: 150px" aria-label="Default select example">
                     <option hidden>Position</option>
                     @foreach ( $positions  as $position )
                         <option value="{{ $position }}" class="" > {{ $position }} </option>
@@ -157,7 +157,6 @@
         <script type="module">
             $(function(){
                 let table = $('#myTable').DataTable({
-                    orderCellsTop: true,
                     pageResize: true,
                     initComplete: function() {
                         const table = this.api();
@@ -168,14 +167,13 @@
                             const column = this;
                             switch (this.index()) {
                                 case 1:
-                                    $('#select').clone().attr("id","filter-company").css("width" , "200px")
+                                    $('#select').clone().attr("id","filter-company").css("width" , "150px")
                                     .appendTo(appendPosition)
                                     .on('change', function() {
                                         const val = $(this).find(":selected").data("val");
                                         column.search(val).draw();
                                     });
                                     break;
-
                                 case 4:
                                     $("#filter-position").detach().appendTo(appendPosition)
                                     .removeClass('d-none')
@@ -207,6 +205,9 @@
                         topStart: null,
                         topEnd: null,
                         top1Start:{
+
+                        },
+                         top0Start:{
                             pageLength: {
                             placeholder: 'Filter'
                             },
@@ -214,7 +215,7 @@
                                 placeholder: 'Type search here'
                             },
                         },
-                        top1End:{
+                        top0End:{
                             buttons: [{
                                 text: 'New',
                                 attr: {
