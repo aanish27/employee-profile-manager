@@ -6,10 +6,10 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Employee Manager</title>
 
-        @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css' ])
+        @vite([ 'resources/css/app.css', 'resources/js/app.js'])
     </head>
 
-    <body class="container.fluid w-100 m-0 d-flex  " style="background-color: whitesmoke">
+    <body class="container.fluid w-100 m-0 d-flex">
         <x-sidebar/>
         <div class="content w-100">
             <x-nav-bar title="Employee Manager"/>
@@ -39,7 +39,7 @@
 
             </div>
 
-            <main class="container.fluid" >
+            <main class="container.fluid p-3" >
 
                 <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
@@ -142,14 +142,17 @@
                     </div>
                   </div>
 
-                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
+                <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
+                    <select id="filter-position" class="form-control-sm py-0 px-1 col-1" aria-label="Default select example">
+                        <option hidden>Position</option>
+                        @foreach ( $positions  as $position )
+                            <option value="{{ $position }}" class="" > {{ $position }} </option>
+                        @endforeach
+                     </select>
+                    <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>
+                </div>
 
-                <select id="filter-position" class="form-select form-control form-control-sm py-0 px-1 d-none" style="width: 150px" aria-label="Default select example">
-                    <option hidden>Position</option>
-                    @foreach ( $positions  as $position )
-                        <option value="{{ $position }}" class="" > {{ $position }} </option>
-                    @endforeach
-                </select>
+                <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
             </main>
         </div>
@@ -160,24 +163,21 @@
                     pageResize: true,
                     initComplete: function() {
                         const table = this.api();
-                        const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
 
                         table.columns().every(function() {
                             table.search('');
                             const column = this;
-                            switch (this.index()) {
-                                case 1:
-                                    $('#select').clone().attr("id","filter-company").css("width" , "150px")
-                                    .appendTo(appendPosition)
+                            switch (this.title()) {
+                                case 'Company':
+                                    $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
+                                    .insertBefore('#filter-position')
                                     .on('change', function() {
                                         const val = $(this).find(":selected").data("val");
                                         column.search(val).draw();
                                     });
                                     break;
-                                case 4:
-                                    $("#filter-position").detach().appendTo(appendPosition)
-                                    .removeClass('d-none')
-                                    .on('change', function() {
+                                case 'Position':
+                                    $("#filter-position").on('change', function() {
                                         column.search( $(this).val()).draw();
                                     });
                                     break;
@@ -186,11 +186,7 @@
                             }
                         });
 
-                        let btn = $('<button class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>')
-                        .appendTo(appendPosition)
-                        .css('width', '70px');
-
-                        $(btn).click(function (e) {
+                        $('#btn-filter-clear').click(function (e) {
                             $('#filter-company option:selected').prop("selected" , false);
                             $('#filter-position option:selected').prop("selected" , false);
                             table.columns().search('').draw();
