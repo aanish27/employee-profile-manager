@@ -28,15 +28,15 @@ class EmployeeController extends Controller
         $draw = $request->query('draw', 1);
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
-        $totalEmployees = Employee::count();
-        $arrayColumns = ['', 'company_name', 'branch', 'name', 'position', 'dob', 'email', 'phone', 'address', 'account_no'];
-        $arr = array();
+        $totalEmployees =   Employee::count();
+        $filterDropDownValues = array();
+        $dTcolumns = $request->query('columns');
 
         //checking if dropdown filter is filled
         if(is_null($search)){
             for ($x = 0; $x <= 9; $x++) {
-                if(!is_null($request->query('columns')[$x]['search']['value'])){
-                    $arr[$x] = $request->query('columns')[$x]['search']['value'];
+                if(!is_null($dTcolumns[$x]['search']['value'])){
+                    $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
                 };
             }
         }
@@ -46,10 +46,9 @@ class EmployeeController extends Controller
         ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id');
 
         //dropdown filter not null
-        if(!empty($arr)){
-            $searchPosition = empty($arr) ? $search : (array_key_exists(4, $arr) ? $arr[4] : null);
-            $searchCompany = empty($arr) ? $search : (array_key_exists(1, $arr) ? $arr[1] : null);
-
+        if(!empty($filterDropDownValues)){
+            $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
+            $searchCompany = array_key_exists('company_name', $filterDropDownValues) ? $filterDropDownValues['company_name'] : null;
             $employees
                 ->where('employees.position', 'like', "%" . $searchPosition . "%")
                 ->where('companies.name', 'like', "%" . $searchCompany . "%")
@@ -80,7 +79,9 @@ class EmployeeController extends Controller
             $num = $request->query('order')['0']['column'];
             $orderDir = $request->query('order')['0']['dir'];
             if(!$num == 0){
-                $employees = ($orderDir == 'desc') ? $employees->orderBy($arrayColumns[$num], $orderDir) : $employees->orderBy($arrayColumns[$num], $orderDir);
+                $employees = ($orderDir == 'desc')
+                        ? $employees->orderBy($dTcolumns[$num]['data'], $orderDir)
+                        : $employees->orderBy($dTcolumns[$num]['data'], $orderDir);
             }
         };
 

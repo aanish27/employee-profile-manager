@@ -22,19 +22,19 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
-        $arrayColumns = ['', 'name', 'branch','country', 'address', 'employees_count', 'projects_count'];
-        $arr = array();
+        $dTcolumns = $request->query('columns');;
+        $filterDropDownValues = array();
 
         if (is_null($search)) {
             for ($x = 0; $x <= 6; $x++) {
-                if (!is_null($request->query('columns')[$x]['search']['value'])) {
-                    $arr[$x] = $request->query('columns')[$x]['search']['value'];
+                if (!is_null($dTcolumns[$x]['search']['value'])) {
+                    $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
                 };
             }
         }
 
-        if(!empty($arr)){
-            $searchCountry = empty($arr) ? $search : (array_key_exists(3, $arr) ? $arr[3] : null);
+        if(!empty($filterDropDownValues)){
+            $searchCountry = array_key_exists('country', $filterDropDownValues) ? $filterDropDownValues['country'] : null;
             $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
 
         }else{
@@ -48,7 +48,9 @@ class CompanyController extends Controller
             $num = $request->query('order')['0']['column'];
             $orderDir = $request->query('order')['0']['dir'];
             if (!$num == 0) {
-                $companys = ($orderDir == 'desc') ? $companys->orderBy($arrayColumns[$num], $orderDir) : $companys->orderBy($arrayColumns[$num], $orderDir);
+                $companys = ($orderDir == 'desc')
+                        ? $companys->orderBy($dTcolumns[$num]['data'], $orderDir)
+                        : $companys->orderBy($dTcolumns[$num]['data'], $orderDir);
             }
         };
 
