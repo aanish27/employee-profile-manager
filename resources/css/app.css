@@ -39,9 +39,4 @@
     width: calc(100vw - 200px) ;
 }
 
-#myTable_wrapper {
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
-    padding: 12px;
-}
+

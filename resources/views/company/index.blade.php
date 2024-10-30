@@ -6,10 +6,10 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        @vite([ 'resources/css/app.css', 'resources/js/app.js',  'resources/css/custom.data-table.css' ])
+        @vite([ 'resources/css/app.css', 'resources/js/app.js',])
     </head>
 
-    <body class="container.fluid w-100 d-flex " style="background-color: rgb(249, 249, 249) ">
+    <body class="container.fluid w-100 d-flex" >
       <x-sidebar/>
 
       <div class="content w-100">
@@ -37,7 +37,7 @@
           </div>
         </div>
 
-        <main class="container.fluid">
+        <main class="container.fluid p-3">
           <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
               <div class="modal-dialog ">
@@ -107,32 +107,33 @@
                 </div>
               </div>
             </div>
+
+            <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
+                <select id="filter-country" class="form-control-sm col-1" aria-label="Default select example">
+                        <option hidden>Country</option>
+                        @foreach ( $countries  as $country )
+                            <option value="{{ $country }}" class="" > {{ $country }} </option>
+                        @endforeach
+                </select>
+                <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0 " title="Clear Filter">Clear</button>
+             </div>
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
-            <select id="filter-country" class="form-select form-control form-control-sm py-1 px-1 d-none" style="width: 200px" aria-label="Default select example">
-                      <option hidden>Country</option>
-                      @foreach ( $countries  as $country )
-                          <option value="{{ $country }}" class="" > {{ $country }} </option>
-                      @endforeach
-            </select>
         </main>
       </div>
 
       <script type="module">
         $(function () {
           let table= $('#myTable').DataTable({
-            orderCellsTop: true,
             pageResize: true,
             initComplete: function() {
                       const table = this.api();
-                      const appendPosition = $("#myTable_wrapper .row:eq(0) .dt-layout-start")
-
                       table.columns().every(function() {
                           table.search('');
                           const column = this;
-                          switch (this.index()) {
-                              case 3:
-                                  $("#filter-country").detach().appendTo(appendPosition)
-                                  .removeClass('d-none')
+
+                          switch (column.title()) {
+                              case 'Country':
+                                  $("#filter-country")
                                   .on('change', function() {
                                       column.search( $(this).val()).draw();
                                   });
@@ -142,11 +143,7 @@
                           }
                       });
 
-                      let btn = $('<button class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>')
-                      .appendTo(appendPosition)
-                      .css('width', '70px');
-
-                      $(btn).click(function (e) {
+                      $('#btn-filter-clear').click(function (e) {
                           $('#filter-country option:selected').prop("selected" , false);
                           table.columns().search('').draw();
                       });
@@ -157,9 +154,7 @@
             scrollX: true,
             responsive: true,
             layout: {
-              topStart: null,
-              topEnd: null,
-              top1Start:{
+              topStart:{
                   pageLength: {
                   placeholder: 'Filter'
                   },
@@ -167,7 +162,7 @@
                       placeholder: 'Type search here'
                   },
               },
-              top1End:{
+              topEnd:{
                   buttons: [{
                       text: 'New',
                       attr: {
