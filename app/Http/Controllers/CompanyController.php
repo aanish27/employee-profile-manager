@@ -12,7 +12,8 @@ class CompanyController extends Controller
     public function index()
     {
         $companys = Company::all();
-        return view('company.index', ['companys' => $companys]);
+        $countries = Company::pluck('country');
+        return view('dashboard.company.index', ['companys' => $companys , 'countries' => $countries]);
     }
 
     public function draw(Request $request){
@@ -21,16 +22,42 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
+        $dTcolumns = $request->query('columns');;
+        $filterDropDownValues = array();
 
-        $companys = Company::where('name' , 'like' , "%".$search."%")
-                            ->orWhere('country' ,'like' , "%".$search."%")
-                            ->orWhere('branch', 'like' , "%".$search."%")
-                            ->orWhere('address' ,'like' , "%".$search."%");
+        if (is_null($search)) {
+            for ($x = 0; $x <= 6; $x++) {
+                if (!is_null($dTcolumns[$x]['search']['value'])) {
+                    $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
+                };
+            }
+        }
+
+        if(!empty($filterDropDownValues)){
+            $searchCountry = array_key_exists('country', $filterDropDownValues) ? $filterDropDownValues['country'] : null;
+            $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
+
+        }else{
+            $companys = Company::where('name', 'like', "%" . $search . "%")
+                ->orWhere('country', 'like', "%" . $search . "%")
+                ->orWhere('branch', 'like', "%" . $search . "%")
+                ->orWhere('address', 'like', "%" . $search . "%");
+        }
+
+        if (!is_null($request->query('order'))) {
+            $num = $request->query('order')['0']['column'];
+            $orderDir = $request->query('order')['0']['dir'];
+            if (!$num == 0) {
+                $companys = ($orderDir == 'desc')
+                        ? $companys->orderBy($dTcolumns[$num]['data'], $orderDir)
+                        : $companys->orderBy($dTcolumns[$num]['data'], $orderDir);
+            }
+        };
 
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)
                                 ->take($length)
-                                ->withCount('projects','employees')->get();
+                                ->withCount('employees','projects')->get();
 
         $response = [
             'draw' => intval($draw),

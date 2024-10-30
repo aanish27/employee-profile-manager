@@ -28,4 +28,15 @@
     color: black;
 }
 
+#myTable tr td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+}
+
+.main-l-sidebar{
+    width: calc(100vw - 200px) ;
+}
+
 
