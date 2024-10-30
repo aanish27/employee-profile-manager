@@ -252,14 +252,14 @@
                             },
                         },
                         {
-                            data: 'company.name',
+                            data: 'company_name',
                             title:'Company' ,
                             render: DataTable.render.ellipsis( 26 )
 
                         },
                         {
 
-                            data: 'company.branch',
+                            data: 'branch',
                             title:'Branch' ,
                             render: DataTable.render.ellipsis( 20 ),
 
@@ -293,7 +293,7 @@
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
-                            data: 'bank_account.account_no',
+                            data: 'account_no',
                             title:'Bank Acc' ,
                         },
                     ],
