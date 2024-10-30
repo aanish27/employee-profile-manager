@@ -41,23 +41,26 @@ class EmployeeController extends Controller
             }
         }
 
+
         $employees = Employee::select('employees.*', 'companies.name as company_name', 'companies.branch', 'companies.deleted_at as company_deleted_at', 'bank_accounts.account_no')
         ->join('companies', 'employees.company_id', '=', 'companies.id')
         ->join('bank_accounts', 'employees.id', '=', 'bank_accounts.employee_id');
-
         //dropdown filter not null
+
         if(!empty($filterDropDownValues)){
             $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
             $searchCompany = array_key_exists('company_name', $filterDropDownValues) ? $filterDropDownValues['company_name'] : null;
-            $employees
+
+            $employees 
                 ->where('employees.position', 'like', "%" . $searchPosition . "%")
                 ->where('companies.name', 'like', "%" . $searchCompany . "%")
                 ->whereHas('company', function ($q){
                     $q->withTrashed();
                 });
             }//dropdown filter null
-        else{
+            else{
             $employees
+
                 ->where('employees.name', 'like', "%" . $search . "%")
                 ->orWhere('employees.position', 'like', "%" . $search . "%")
                 ->orWhere('employees.email', 'like', "%" . $search . "%")
