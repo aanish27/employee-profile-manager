@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     public function index(Request $request){
         $companies = Company::withTrashed()->get();
         $positions = Employee::pluck('position');
-        return view('admin' , [ 'companies' => $companies , 'positions' => $positions ]);
+        return view('dashboard.employee.index' , [ 'companies' => $companies , 'positions' => $positions ]);
     }
 
     public function draw(Request $request){
@@ -51,7 +51,7 @@ class EmployeeController extends Controller
             $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
             $searchCompany = array_key_exists('company_name', $filterDropDownValues) ? $filterDropDownValues['company_name'] : null;
 
-            $employees 
+            $employees
                 ->where('employees.position', 'like', "%" . $searchPosition . "%")
                 ->where('companies.name', 'like', "%" . $searchCompany . "%")
                 ->whereHas('company', function ($q){
