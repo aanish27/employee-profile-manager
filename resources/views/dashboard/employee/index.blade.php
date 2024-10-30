@@ -236,6 +236,12 @@
                         url: 'employee/draw',
                     },
                     columns: [
+                          {
+                            data: 'id',
+                            title:'#' ,
+                            name: 'id',
+
+                        },
                         {
                             data: null ,
                             title: "Actions",
@@ -249,49 +255,58 @@
                             },
                         },
                         {
-                            data: 'company_name',
+                            data: 'company_id',
                             title:'Company' ,
+                            name: 'company_id',
                             render: DataTable.render.ellipsis( 26 )
 
                         },
                         {
 
-                            data: 'branch',
+                            data: 'company.branch',
                             title:'Branch' ,
+                            name: 'company_branch',
                             render: DataTable.render.ellipsis( 20 ),
 
                         },
                         {
                             data: 'name' ,
                             title: 'Name' ,
+                            name: 'name',
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
                             data: 'position' ,
                             title:'Position' ,
+                            name: 'position',
                             render: DataTable.render.ellipsis( 15 )
                         },
                         {
                             data: 'dob',
                             title:'DOB' ,
+                            name: 'dob',
 
                         },
                         {
                             data: 'email' ,
                             title:'Email' ,
+                            name: 'email',
                         },
                         {
                             data: 'phone',
                             title:'Phone' ,
+                            name: 'phone',
                         },
                         {
                             data: 'address' ,
                             title:'Address' ,
-                            render: DataTable.render.ellipsis( 26 )
+                            render: DataTable.render.ellipsis( 26 ),
+                            name: 'address',
                         },
                         {
-                            data: 'account_no',
+                            data: 'bank_account.account_no',
                             title:'Bank Acc' ,
+                            name: 'bank_account_no',
                         },
                     ],
                     columnDefs: [
