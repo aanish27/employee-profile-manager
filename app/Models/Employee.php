@@ -25,7 +25,7 @@ class Employee extends Model
 
     public function company()
     {
-        return $this->hasOne(Company::class, "id", "company_id")->withTrashed();
+        return $this->belongsTo(Company::class)->withTrashed();
     }
 
     public function projects(): BelongsToMany

@@ -39,43 +39,58 @@ class EmployeeController extends Controller
         //     }
         // }
 
-        $employees = Employee::with(['company', 'bankAccount']);
-        // $employees = Employee::with(['company' => function($q){
-        //     $q->orderBy('id', 'asc');
-        // } , 'bankAccount']);
+        $employees = Employee::with('company' , 'bankAccount');
 
-        //dropdown filter not null
-        // if(!empty($filterDropDownValues)){
-        //     $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
-        //     $searchCompany = array_key_exists('company.name', $filterDropDownValues) ? $filterDropDownValues['company.name'] : null;
+        #dropdown
+        if(!empty($filterDropDownValues)){
+            $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
+            $searchCompany = array_key_exists('company_name', $filterDropDownValues) ? $filterDropDownValues['company_name'] : null;
 
-        //     $employees->where('position', 'like', "%" . $searchPosition . "%")
-        //                 ->whereHas('company', function ($q) use ($searchCompany) {
-        //                     $q->where('companies.name', 'like', "%" . $searchCompany . "%");
-        //                 });
-        // }//dropdown filter null
-        // else{
-        //     $employees->where('name', 'like', "%" . $search . "%")
-        //                 ->orWhere('position', 'like', "%" . $search . "%")
-        //                 ->orWhere('email', 'like', "%" . $search . "%")
-        //                 ->orWhere('address', 'like', "%" . $search . "%")
-        //                 ->orWhere('dob', 'like', "%" . $search . "%")
-        //                 ->orWhere('phone', 'like', "%" . $search . "%")
-        //                 ->orWhereHas('bankAccount',function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
-        //                     $q->where('account_no', 'like', "%" . $search . "%");
-        //                 })
-        //                 ->orWhereHas('company', function ($q) use ($search) {
-        //                     $q->where('companies.name', 'like', "%" . $search . "%")
-        //                     ->orWhere('companies.branch', 'like', "%" . $search . "%");
-        //                 });
-        // }
-        if($request->query('order') != null) {
+            $employees
+                ->where('position', 'like', "%" . $searchPosition . "%")
+                ->where('companies.name', 'like', "%" . $searchCompany . "%");
+            }//dropdown filter null
+            else{
+            $employees
+                ->where('name', 'like', "%" . $search . "%")
+                ->orWhere('position', 'like', "%" . $search . "%")
+                ->orWhere('email', 'like', "%" . $search . "%")
+                ->orWhere('address', 'like', "%" . $search . "%")
+                ->orWhere('dob', 'like', "%" . $search . "%")
+                ->orWhere('phone', 'like', "%" . $search . "%")
+                ->orWhereHas('bankAccount',function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
+                    $q->where('account_no', 'like', "%" . $search . "%");
+                })
+                ->orWhereHas('company', function ($q) use ($search) {
+                    $q->where('companies.name', 'like', "%" . $search . "%")
+                    ->orWhere('companies.branch', 'like', "%" . $search . "%");
+                });
+        }
 
-            $orderCol = $request->query('order')[0]['name'];
-            $orderDir = $request->query('order')[0]['dir'];
-
-            $employees->orderBy($orderCol, $orderDir);
-
+        #column ordering
+        if ($request->query('order') != null){
+            if($request->query('order')[0]['name'] != null){
+                $orderCol = $request->query('order')[0]['name'];
+                $orderDir = $request->query('order')['0']['dir'];
+                if ($orderCol === 'company.branch') {
+                    $employees->orderBy(
+                        Company::select('branch')
+                            ->whereColumn('companies.id', 'employees.company_id')
+                            ->withTrashed(),
+                        $orderDir);
+                } elseif ($orderCol === 'company.name') {
+                    $employees->orderBy(
+                        Company::select('name')
+                            ->whereColumn('companies.id', 'employees.company_id')
+                            ->withTrashed(),
+                        $orderDir);
+                } elseif ($orderCol === 'bank_account.account_no') {
+                    $employees->orderBy(
+                        BankAccount::select('account_no')
+                            ->whereColumn('employees.id', 'bank_accounts.employee_id'),
+                        $orderDir);
+                }
+            }
         };
 
 
@@ -96,14 +111,12 @@ class EmployeeController extends Controller
                                 ->take($length)
                                 ->get();
 
-        $response = [
+        return Response::json([
             'draw' => intval($draw),
             'recordsTotal' => intval($totalEmployees),
             'recordsFiltered' => $filteredEmployees,
             'data' => $employees
-        ];
-
-        return Response::json($response);
+        ]);
     }
 
     public function store(Request $request){

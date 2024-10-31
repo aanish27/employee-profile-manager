@@ -253,11 +253,12 @@
                                             <i class="bi bi-trash" style="color:red"></i>
                                         </button> `
                             },
+                            orderable: false
                         },
                         {
-                            data: 'company_id',
+                            data: 'company.name',
                             title:'Company' ,
-                            name: 'company_id',
+                            name: 'company.name',
                             render: DataTable.render.ellipsis( 26 )
 
                         },
@@ -265,7 +266,7 @@
 
                             data: 'company.branch',
                             title:'Branch' ,
-                            name: 'company_branch',
+                            name: 'company.branch',
                             render: DataTable.render.ellipsis( 20 ),
 
                         },
@@ -295,22 +296,21 @@
                         {
                             data: 'phone',
                             title:'Phone' ,
-                            name: 'phone',
+                            name: 'phone'
                         },
                         {
                             data: 'address' ,
                             title:'Address' ,
-                            render: DataTable.render.ellipsis( 26 ),
                             name: 'address',
+                            render: DataTable.render.ellipsis( 26 )
                         },
                         {
                             data: 'bank_account.account_no',
                             title:'Bank Acc' ,
-                            name: 'bank_account_no',
+                            name: 'bank_account.account_no'
                         },
                     ],
                     columnDefs: [
-                        { orderable: false, targets: 0 },
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
                 });
