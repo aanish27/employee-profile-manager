@@ -247,55 +247,64 @@
                                             <i class="bi bi-trash" style="color:red"></i>
                                         </button> `
                             },
+                            orderable: false
                         },
                         {
-                            data: 'company_name',
+                            data: 'company.name',
                             title:'Company' ,
+                            name: 'company.name',
                             render: DataTable.render.ellipsis( 26 )
 
                         },
                         {
 
-                            data: 'branch',
+                            data: 'company.branch',
                             title:'Branch' ,
+                            name: 'company.branch',
                             render: DataTable.render.ellipsis( 20 ),
 
                         },
                         {
                             data: 'name' ,
                             title: 'Name' ,
+                            name: 'name',
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
                             data: 'position' ,
                             title:'Position' ,
+                            name: 'position',
                             render: DataTable.render.ellipsis( 15 )
                         },
                         {
                             data: 'dob',
                             title:'DOB' ,
+                            name: 'dob',
 
                         },
                         {
                             data: 'email' ,
                             title:'Email' ,
+                            name: 'email',
                         },
                         {
                             data: 'phone',
                             title:'Phone' ,
+                            name: 'phone'
                         },
                         {
                             data: 'address' ,
                             title:'Address' ,
+                            name: 'address',
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
-                            data: 'account_no',
+                            data: 'bank_account.account_no',
                             title:'Bank Acc' ,
+                            name: 'bank_account.account_no'
                         },
                     ],
                     columnDefs: [
-                        { orderable: false, targets: 0 },
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
                 });
