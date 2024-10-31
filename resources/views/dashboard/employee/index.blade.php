@@ -236,6 +236,12 @@
                         url: 'employee/draw',
                     },
                     columns: [
+                          {
+                            data: 'id' ,
+                            title: '#' ,
+                            name: 'id',
+                            render: DataTable.render.ellipsis( 26 )
+                        },
                         {
                             data: null ,
                             title: "Actions",
@@ -247,14 +253,15 @@
                                             <i class="bi bi-trash" style="color:red"></i>
                                         </button> `
                             },
-                            orderable: false
+                            name: 'action',
+                            orderable: false,
+                            sortable: false,
                         },
                         {
                             data: 'company.name',
                             title:'Company' ,
                             name: 'company.name',
                             render: DataTable.render.ellipsis( 26 )
-
                         },
                         {
 

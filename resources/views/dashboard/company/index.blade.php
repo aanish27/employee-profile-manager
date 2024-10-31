@@ -188,6 +188,11 @@
             },
             columns: [
               {
+                data: 'id',
+                title:'#',
+                name:'id',
+              },
+              {
                 data: null ,
                 title: 'Actions',
                 render: function (data, type, row) {
@@ -204,6 +209,8 @@
                                           </svg>
                                       </button> `
                   },
+                  sortable: false,
+                  orderable: false,
               },
               {
                 data: 'name',
