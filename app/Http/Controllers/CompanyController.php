@@ -44,15 +44,12 @@ class CompanyController extends Controller
                 ->orWhere('address', 'like', "%" . $search . "%");
         }
 
-        if (!is_null($request->query('order'))) {
-            $num = $request->query('order')['0']['column'];
-            $orderDir = $request->query('order')['0']['dir'];
-            if (!$num == 0) {
-                $companys = ($orderDir == 'desc')
-                        ? $companys->orderBy($dTcolumns[$num]['data'], $orderDir)
-                        : $companys->orderBy($dTcolumns[$num]['data'], $orderDir);
+        if ($request->query('order') != null) {
+            if ($request->query('order')[0]['name'] != null) {
+                $companys->orderBy($request->query('order')[0]['name'],$request->query('order')['0']['dir']);
+                }
             }
-        };
+
 
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)

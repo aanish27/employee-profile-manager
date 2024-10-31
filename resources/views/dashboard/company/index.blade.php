@@ -208,30 +208,36 @@
               {
                 data: 'name',
                 title:'Company',
+                name:'name',
                 render: DataTable.render.ellipsis( 50 )
               },
               {
                 data: 'branch',
                 title:'Branch',
+                name: 'branch',
                 render: DataTable.render.ellipsis( 26 )
               },
               {
                 data: 'country' ,
                 title: 'Country' ,
+                name: 'country',
                 render: DataTable.render.ellipsis( 26 )
               },
               {
                 data: 'address' ,
                 title:'Address',
+                name: 'address',
                 render: DataTable.render.ellipsis( 100 )
               },
               {
                 data: 'employees_count' ,
                 title:'Employees',
+                name: 'employees_count'
               },
               {
                 data: 'projects_count',
                 title:'Projects',
+                name: 'projects_count'
               },
             ],
             columnDefs: [

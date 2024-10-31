@@ -91,6 +91,8 @@ class EmployeeController extends Controller
                         BankAccount::select('account_no')
                             ->whereColumn('employees.id', 'bank_accounts.employee_id'),
                         $orderDir);
+                }else{
+                    $employees->orderBy($orderCol,$orderDir);
                 }
             }
         };
