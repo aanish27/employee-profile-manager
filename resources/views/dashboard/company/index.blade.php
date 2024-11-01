@@ -109,7 +109,7 @@
             </div>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                <select id="filter-country" class="form-control-sm col-1" aria-label="Default select example">
+                <select id="filter-country" class="form-control-sm col-1" aria-label="Default select example" multiple>
                         <option hidden>Country</option>
                         @foreach ( $countries  as $country )
                             <option value="{{ $country }}" class="" > {{ $country }} </option>
@@ -175,7 +175,7 @@
                 url: 'company/draw',
                 data: function (d) {
                     const dropdowns = {};
-                    dropdowns['country'] = ($("#filter-country").val() !== 'Country') ? $("#filter-country").val() : dropdowns['country']; // false does nothing !! self assginment
+                    dropdowns['country'] = ($("#filter-country").val().length === 0 ) ?  dropdowns['country'] : $("#filter-country").val();
                     d.dropdowns = dropdowns;
                 }
             },

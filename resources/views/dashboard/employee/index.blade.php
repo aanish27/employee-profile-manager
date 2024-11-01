@@ -143,7 +143,7 @@
                   </div>
 
                 <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                    <select id="filter-position" class="form-control-sm py-0 px-1 col-1" aria-label="Default select example">
+                    <select id="filter-position" class="form-control-sm py-0 px-1 col-1 " aria-label="Default select example" multiple>
                         <option hidden>Position</option>
                         @foreach ( $positions  as $position )
                             <option value="{{ $position }}" class="" > {{ $position }} </option>
@@ -161,11 +161,12 @@
             $(function(){
 
                 //filterDropdown Company
-                $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
+                $('#select').clone().attr("id","filter-company").prop('multiple', true).removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
                 .insertBefore('#filter-position')
                 .on('change', function() {
                     table.search('').draw();
                 });
+                $('#filter-company option:selected').prop("selected" , false);
 
                 //filterDropdown Position
                 $("#filter-position").on('change', function() {
@@ -223,8 +224,8 @@
                         url: 'employee/draw',
                         data: function (d) {
                             const dropdowns = {};
-                            dropdowns['position'] = ($("#filter-position").val() !== 'Position') ? $("#filter-position").val() : dropdowns['position']; // false does nothing !! self assginment
-                            dropdowns['company'] = ($("#filter-company").val() !== 'Company') ? $("#filter-company").val() : dropdowns['company'];
+                            dropdowns['position'] = ($("#filter-position").val().length === 0 ) ?  dropdowns['position'] : $("#filter-position").val();
+                            dropdowns['company'] = ($("#filter-company").val().length === 0) ? dropdowns['company'] : $("#filter-company").val() ;
                             d.dropdowns = dropdowns;
                         }
                     },
