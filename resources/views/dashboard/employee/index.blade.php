@@ -159,40 +159,29 @@
 
         <script type="module">
             $(function(){
+
+                 //filterDropdown Company
+                $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
+                .insertBefore('#filter-position')
+                .on('change', function() {
+                    table.search('')
+                    table.draw();
+                });
+
+                //filterDropdown Position
+                $("#filter-position").on('change', function() {
+                    table.search('')
+                    table.draw();
+                });
+
+                 $('#btn-filter-clear').click(function (e) {
+                    $('#filter-company option:selected').prop("selected" , false);
+                    $('#filter-position option:selected').prop("selected" , false);
+                    table.columns().search('').draw();
+                });
+
                 let table = $('#myTable').DataTable({
                     pageResize: true,
-                    initComplete: function() {
-                        const table = this.api();
-
-                        table.columns().every(function() {
-                            table.search('');
-                            const column = this;
-                            switch (this.title()) {
-                                case 'Company':
-                                    $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
-                                    .insertBefore('#filter-position')
-                                    .on('change', function() {
-                                        const val = $(this).find(":selected").data("val");
-                                        column.search(val).draw();
-                                    });
-                                    break;
-                                case 'Position':
-                                    $("#filter-position").on('change', function() {
-                                        column.search( $(this).val()).draw();
-                                    });
-                                    break;
-                                default:
-                                    return;
-                            }
-                        });
-
-                        $('#btn-filter-clear').click(function (e) {
-                            $('#filter-company option:selected').prop("selected" , false);
-                            $('#filter-position option:selected').prop("selected" , false);
-                            table.columns().search('').draw();
-                        });
-
-                    },
                     scrollCollapse: true,
                     scrollX: true,
                     scrollY: 720,
@@ -234,7 +223,23 @@
                     processing: true,
                     ajax: {
                         url: 'employee/draw',
+                        data: function (d) {
+                            const dropdowns = {};
+                            dropdowns['position'] = ($("#filter-position").val() !== 'Position') ? $("#filter-position").val() : dropdowns['position']; // false does nothing !! self assginment
+                            dropdowns['company'] = ($("#filter-company").val() !== 'Company') ? $("#filter-company").val() : dropdowns['company'];
+                            // ($("#filter-position").val() == 'Position') ? '' : dropdowns.push($("#filter-position").val());
+                            // ($("#filter-company").val() == 'Company') ? '' : dropdowns.push($("#filter-company").val());
+                            d.dropdowns = dropdowns;
+                        }
+
+                            // d.dropdowns = [
+                            //     ($("#filter-position").val() == 'Position') ?
+                            //         null :  $("#filter-position").val() ,
+                            //     ($("#filter-company").val() == 'Company') ?
+                            //         null :  $("#filter-company").val()
+                            // ];
                     },
+
                     columns: [
                           {
                             data: 'id' ,
@@ -315,6 +320,7 @@
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
                 });
+
 
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {

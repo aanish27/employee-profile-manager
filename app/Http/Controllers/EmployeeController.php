@@ -23,52 +23,94 @@ class EmployeeController extends Controller
 
     public function draw(Request $request){
 
+
         //SERVER SIDE RENDERING HANDLE FOR data table
         $search = $request->query('search')['value'];
         $draw = $request->query('draw', 1);
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalEmployees =   Employee::count();
-        $filterDropDownValues = array();
-        $dTcolumns = $request->query('columns');
 
-        //checking if dropdown filter is filled
-        if(is_null($search)){
-            for ($x = 0; $x <= 9; $x++) {
-                if(!is_null($dTcolumns[$x]['search']['value'])){
-                    $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
-                };
-            }
-        }
+        // $filterDropDownValues = array();
+        // $dTcolumns = $request->query('columns');
+        // dd([$request->dropdownCompany, $request->dropdownPosition, $request->all()]);
+
+
+
+        // if(is_null($search)){
+        //     for ($x = 0; $x <= 9; $x++) {
+        //         if(!is_null($dTcolumns[$x]['search']['value'])){
+        //             $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
+        //         };
+        //     }
+        // }
 
         $employees = Employee::with('company' , 'bankAccount');
 
         #dropdown
-        if(!empty($filterDropDownValues)){
-            $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
-            $searchCompany = array_key_exists('companies.name', $filterDropDownValues) ? $filterDropDownValues['companies.name'] : null;
 
-            $employees
-                ->where('position', 'like', "%" . $searchPosition . "%")
-                ->where('companies.name', 'like', "%" . $searchCompany . "%");
-            }//dropdown filter null
-            else{
-            $employees
+            // $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
+            // $searchCompany = array_key_exists('companies.name', $filterDropDownValues) ? $filterDropDownValues['companies.name'] : null;
+
+
+
+            // $employees
+            //     ->where('position', 'like', "%" . $searchPosition . "%")
+            //     ->orWhereHas('company', function ($q) use ($searchCompany) {
+            //         $q->where('companies.id', 'like', "%" . $searchCompany . "%");
+            //     });
+            // //dropdown filter null
+
+
+            // $searchCompany == null && $searchPosition == null ||||||||| yep this one wroks but what if we had more filters !!!!
+
+            if(!$request->dropdowns){
+                $employees
                 ->where('name', 'like', "%" . $search . "%")
                 ->orWhere('position', 'like', "%" . $search . "%")
                 ->orWhere('email', 'like', "%" . $search . "%")
                 ->orWhere('address', 'like', "%" . $search . "%")
                 ->orWhere('dob', 'like', "%" . $search . "%")
                 ->orWhere('phone', 'like', "%" . $search . "%")
-                ->orWhereHas('bankAccount',function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
+                ->orWhereHas('bankAccount', function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
                     $q->where('account_no', 'like', "%" . $search . "%");
                 })
                 ->orWhereHas('company', function ($q) use ($search) {
-                    $q->where('companies.name', 'like', "%" . $search . "%")
-                    ->orWhere('companies.branch', 'like', "%" . $search . "%");
+                    $q->where('name', 'like', "%" . $search . "%")
+                        ->orWhere('branch', 'like', "%" . $search . "%");
                 });
-        }
+            }
+            else{
 
+                $searchCompany = $request->dropdowns['company'] ?? null;
+                $searchPosition = $request->dropdowns['position'] ?? null;
+
+                $employees
+                    ->where('position', 'like', "%" . $searchPosition . "%")
+                    ->whereHas('company', function ($q) use ($searchCompany) {
+                        $q->where('id', 'like', "%" . $searchCompany . "%");
+                });
+            }
+
+                //sepereate this
+                // ->where(function ($q) use ($searchPosition , $searchCompany){
+                //     $q->where('position', 'like', "%" . $searchPosition . "%")
+                //         ->whereHas('company', function ($q) use ($searchCompany) {
+                //          $q->where('id', 'like', "%" . $searchCompany . "%");
+                //     });
+                // });
+
+
+                //sepereate this
+                // ->orWhere(function ($q) use ($searchPosition , $searchCompany){
+                //     $q->where('position', 'like', "%" . $searchPosition . "%")
+                //         ->whereHas('company', function ($q) use ($searchCompany) {
+                //          $q->where('id', 'like', "%" . $searchCompany . "%");
+                //     });
+                // });
+
+        // dd($searchCompany, $searchPosition);
+        // dd($searchCompany, $searchPosition, $search);
         #column ordering
         if ($order = $request->query('order')[0] ?? null) {
                 $orderDir = $order['dir'] ?? 'asc';
