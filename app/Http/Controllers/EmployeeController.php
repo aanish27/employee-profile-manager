@@ -45,14 +45,21 @@ class EmployeeController extends Controller
                 });
         }
         else{
-            $searchCompany = $request->dropdowns['company'] ?? null;
-            $searchPosition = $request->dropdowns['position'] ?? null;
-
-            $employees->where('position', 'like', "%" . $searchPosition . "%")
-                ->whereHas('company', function ($q) use ($searchCompany) {
-                    $q->where('id', 'like', "%" . $searchCompany . "%");
+            if($searchCompany = $request->dropdowns['company'] ?? null){
+                $employees->whereHas('company', function ($q) use ($searchCompany) {
+                    $q->where('id', $searchCompany);
                 });
             }
+
+            if ($searchPosition = $request->dropdowns['position'] ?? null) {
+                $employees->where('position', $searchPosition);
+            };
+        };
+
+
+
+
+
 
         if ($order = $request->query('order')[0] ?? null) {
             $orderDir = $order['dir'] ?? 'asc';

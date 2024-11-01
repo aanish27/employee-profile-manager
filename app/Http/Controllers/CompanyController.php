@@ -30,7 +30,7 @@ class CompanyController extends Controller
                 ->orWhere('address', 'like', "%" . $search . "%");
         }else{
             $searchCountry = $request->dropdowns['country'] ?? null;
-            $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
+            $companys = Company::where('country', $searchCountry);
         }
 
         if ($order = $request->query('order')[0] ?? null) {
