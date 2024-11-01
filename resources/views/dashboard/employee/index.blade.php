@@ -160,24 +160,22 @@
         <script type="module">
             $(function(){
 
-                 //filterDropdown Company
+                //filterDropdown Company
                 $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
                 .insertBefore('#filter-position')
                 .on('change', function() {
-                    table.search('')
-                    table.draw();
+                    table.search('').draw();
                 });
 
                 //filterDropdown Position
                 $("#filter-position").on('change', function() {
-                    table.search('')
-                    table.draw();
+                    table.search('').draw();
                 });
 
                  $('#btn-filter-clear').click(function (e) {
                     $('#filter-company option:selected').prop("selected" , false);
                     $('#filter-position option:selected').prop("selected" , false);
-                    table.columns().search('').draw();
+                    table.draw();
                 });
 
                 let table = $('#myTable').DataTable({
@@ -227,21 +225,11 @@
                             const dropdowns = {};
                             dropdowns['position'] = ($("#filter-position").val() !== 'Position') ? $("#filter-position").val() : dropdowns['position']; // false does nothing !! self assginment
                             dropdowns['company'] = ($("#filter-company").val() !== 'Company') ? $("#filter-company").val() : dropdowns['company'];
-                            // ($("#filter-position").val() == 'Position') ? '' : dropdowns.push($("#filter-position").val());
-                            // ($("#filter-company").val() == 'Company') ? '' : dropdowns.push($("#filter-company").val());
                             d.dropdowns = dropdowns;
                         }
-
-                            // d.dropdowns = [
-                            //     ($("#filter-position").val() == 'Position') ?
-                            //         null :  $("#filter-position").val() ,
-                            //     ($("#filter-company").val() == 'Company') ?
-                            //         null :  $("#filter-company").val()
-                            // ];
                     },
-
                     columns: [
-                          {
+                        {
                             data: 'id' ,
                             title: '#' ,
                             name: 'id',
@@ -269,7 +257,6 @@
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
-
                             data: 'company.branch',
                             title:'Branch' ,
                             name: 'company.branch',
@@ -292,7 +279,6 @@
                             data: 'dob',
                             title:'DOB' ,
                             name: 'dob',
-
                         },
                         {
                             data: 'email' ,
@@ -320,7 +306,6 @@
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
                 });
-
 
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {
