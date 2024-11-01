@@ -123,31 +123,19 @@
 
       <script type="module">
         $(function () {
+
+          // filter Country
+          $("#filter-country").on('change', function() {
+              table.search('').draw();
+          });
+
+          $('#btn-filter-clear').click(function (e) {
+              $('#filter-country option:selected').prop("selected" , false);
+              table.columns().search('').draw();
+          });
+
           let table= $('#myTable').DataTable({
             pageResize: true,
-            initComplete: function() {
-                      const table = this.api();
-                      table.columns().every(function() {
-                          table.search('');
-                          const column = this;
-
-                          switch (column.title()) {
-                              case 'Country':
-                                  $("#filter-country")
-                                  .on('change', function() {
-                                      column.search( $(this).val()).draw();
-                                  });
-                                  break;
-                              default:
-                                  return;
-                          }
-                      });
-
-                      $('#btn-filter-clear').click(function (e) {
-                          $('#filter-country option:selected').prop("selected" , false);
-                          table.columns().search('').draw();
-                      });
-                  },
             fixedColumns: true,
             scrollCollapse: true,
             scrollY: 7200,
@@ -185,6 +173,11 @@
             processing: true,
             ajax: {
                 url: 'company/draw',
+                data: function (d) {
+                    const dropdowns = {};
+                    dropdowns['country'] = ($("#filter-country").val() !== 'Country') ? $("#filter-country").val() : dropdowns['country']; // false does nothing !! self assginment
+                    d.dropdowns = dropdowns;
+                }
             },
             columns: [
               {
