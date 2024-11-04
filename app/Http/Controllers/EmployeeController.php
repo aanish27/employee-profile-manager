@@ -13,9 +13,9 @@ use Illuminate\Validation\ValidationException;
 class EmployeeController extends Controller
 {
     public function index(Request $request){
-        $companies = Company::withTrashed()->get();
+        $companys = Company::withTrashed()->get();
         $positions = Employee::pluck('position');
-        return view('dashboard.employee.index' , [ 'companies' => $companies , 'positions' => $positions ]);
+        return view('dashboard.employee' , [ 'companys' => $companys , 'positions' => $positions ]);
     }
 
     public function draw(Request $request){

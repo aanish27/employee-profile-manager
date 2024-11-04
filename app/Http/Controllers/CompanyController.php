@@ -11,9 +11,9 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $companys = Company::all();
+        $companys =  Company::all();
         $countries = Company::pluck('country');
-        return view('dashboard.company.index', ['companys' => $companys , 'countries' => $countries]);
+        return view('dashboard.company', ['companys' => $companys , 'countries' => $countries]);
     }
 
     public function draw(Request $request){
