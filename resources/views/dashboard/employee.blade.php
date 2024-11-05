@@ -121,12 +121,10 @@
             scrollCollapse: true,
             scrollX: true,
             scrollY: 720,
-            responsive: true,
             layout: {
                 topStart: null,
                 topEnd: null,
                 top1Start:{
-
                 },
                     top0Start:{
                     pageLength: {
