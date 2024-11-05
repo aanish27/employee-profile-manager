@@ -8,6 +8,12 @@ window.jQuery = window.$ = $;
 
 import DataTable from 'datatables.net-bs5';
 window.DataTable = DataTable;
+
+import 'bootstrap-select/dist/js/bootstrap-select.js'
+import 'bootstrap-select/dist/js/bootstrap-select.min.js'
+import 'bootstrap-select/dist/css/bootstrap-select.css'
+import 'bootstrap-select/dist/css/bootstrap-select.min.css'
+
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
 import "bootstrap-icons/font/bootstrap-icons.css";

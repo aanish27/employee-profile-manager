@@ -105,6 +105,7 @@
 <script type="module">
     $(function(){
 
+        $('#filter-position').selectpicker();
         //filterDropdown Position
         $("#filter-position").on('change', function() {
             table.search('').draw();
