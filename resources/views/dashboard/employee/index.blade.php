@@ -143,27 +143,8 @@
                   </div>
 
                   <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                    <div class="filter p-0">
-                        <label for="filter-company" class=""> Company
-                            <select id="filter-company" class="col-1 select2-filter" style="width: 200px">
-                            @foreach ( $companies  as $company )
-                                <option value="{{ $company->id }}" class="" > {{ $company->name }} </option>
-                            @endforeach
-                            </select>
-                        </label>
-                        <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0 " title="Clear Filter">Clear</button>
-                    </div>
-
-                    <div class="filter p-0">
-                        <label for="filter-position" class=""> Position
-                        <select id="filter-position" class="col-1 select2-filter" style="width: 200px">
-                            @foreach ( $positions  as $position )
-                            <option value="{{ $position }}" class="" > {{ $position }} </option>
-                            @endforeach
-                        </select>
-                        </label>
-                        <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0" title="Clear Filter">Clear</button>
-                    </div>
+                    <x-dropdown-filter id="filter-company" name="Company" :collections="$companies" feild="name" width="200px" />
+                    <x-dropdown-filter id="filter-position" name="Position" :collections="$positions" feild="null" width="200px" />
                   </div>
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
@@ -179,7 +160,7 @@
                 $(".select2-filter").select2({
                     theme: 'bootstrap-5',
                     multiple: true,
-                    width: 'resolve'
+                    width: 'resolve',
                 });
 
                 let table = $('#myTable').DataTable({

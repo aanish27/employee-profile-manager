@@ -109,17 +109,8 @@
             </div>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-              <div class="filter p-0">
-                <label for="filter-country" class=""> Country
-                  <select id="filter-country" class="col-1 select2-filter" style="width: 200px">
-                    @foreach ( $countries  as $country )
-                      <option value="{{ $country }}" class="" > {{ $country }} </option>
-                    @endforeach
-                  </select>
-                </label>
-                <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0 " title="Clear Filter">Clear</button>
-              </div>
-             </div>
+              <x-dropdown-filter id="filter-country" name="Country" :collections="$countries" feild="null" width="200px" />
+            </div>
 
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
         </main>
