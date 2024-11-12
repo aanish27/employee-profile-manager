@@ -157,16 +157,10 @@
 
                 //Dropdown filter Initialize
                 $('.select2-filter').val(null);
-
                 $(".select2-filter").select2({
                     theme: 'bootstrap-5',
                     multiple: true,
                     width: 'resolve',
-                }).on('select2:close', function() {
-                    const select = $(this)
-                    if($(this).val().includes("clear-btn")) {
-                        select.val(null).trigger('change');
-                    }
                 });
 
                 let table = $('#myTable').DataTable({
@@ -300,12 +294,19 @@
 
                 //Dropdown filter
                 $('.select2-filter').on('change', function () {
+                    const select = $(this)
                     const ul = $(this).siblings('span.select2').find('ul')
                     const count = $(this).select2('data').length
-                    if(count > 1){
-                        ul.html("<span>" +count+ " items selected</span>")
+                    if($(this).val().includes("clear-btn")) {
+                        select.val(null).trigger("change");
                     }
-                    table.draw();
+                    else if(count > 1){
+                        ul.html("<span>" +count+ " items selected</span>")
+                        table.draw();
+                    }
+                    else{
+                        table.draw();
+                    }
                 })
 
                 //sidebar
