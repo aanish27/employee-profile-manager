@@ -109,14 +109,18 @@
             </div>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                <select id="filter-country" class="form-control-sm col-1" aria-label="Default select example" multiple>
-                        <option hidden>Country</option>
-                        @foreach ( $countries  as $country )
-                            <option value="{{ $country }}" class="" > {{ $country }} </option>
-                        @endforeach
-                </select>
-                <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0 " title="Clear Filter">Clear</button>
+              <div class="filter p-0">
+                <label for="filter-country" class=""> Country
+                  <select id="filter-country" class="col-1 select2-filter" style="width: 200px">
+                    @foreach ( $countries  as $country )
+                      <option value="{{ $country }}" class="" > {{ $country }} </option>
+                    @endforeach
+                  </select>
+                </label>
+                <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0 " title="Clear Filter">Clear</button>
+              </div>
              </div>
+
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
         </main>
       </div>
@@ -124,14 +128,12 @@
       <script type="module">
         $(function () {
 
-          // filter Country
-          $("#filter-country").on('change', function() {
-              table.search('').draw();
-          });
-
-          $('#btn-filter-clear').click(function (e) {
-              $('#filter-country option:selected').prop("selected" , false);
-              table.columns().search('').draw();
+          //bug-fix-select2: auto select on page load
+          $('.select2-filter').val(null).trigger('change');
+          $(".select2-filter").select2({
+              theme: 'bootstrap-5',
+              multiple: true,
+              width: 'resolve'
           });
 
           let table= $('#myTable').DataTable({
@@ -246,6 +248,20 @@
             ],
           });
 
+          //.select2-filter  - try replace this to #filter-country
+          $('.select2-filter').on('change', function () {
+            const ul = $(this).siblings('span.select2').find('ul')
+            const count = $(this).select2('data').length
+            if(count > 1){
+                ul.html("<span>" +count+ " items selected</span>")
+            }
+            table.draw();
+          })
+
+          $('.btn-filter-clear').click(function (e) {
+             $(this).siblings("label").children('select').val(null).trigger('change')
+          });
+
           // sidebar
           $('#sidebar-toggle').on('click', function() {
               $('#sidebar-long').toggleClass('d-none');
@@ -301,6 +317,8 @@
                 displayToast(response , "error")
               });
           });
+
+
 
           // Clear Forms
           $('.btn-close').click(function (e) {

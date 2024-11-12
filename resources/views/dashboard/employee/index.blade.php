@@ -142,15 +142,29 @@
                     </div>
                   </div>
 
-                <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                    <select id="filter-position" class="form-control-sm py-0 px-1 col-1 " aria-label="Default select example" multiple>
-                        <option hidden>Position</option>
-                        @foreach ( $positions  as $position )
+                  <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
+                    <div class="filter p-0">
+                        <label for="filter-company" class=""> Company
+                            <select id="filter-company" class="col-1 select2-filter" style="width: 200px">
+                            @foreach ( $companies  as $company )
+                                <option value="{{ $company->id }}" class="" > {{ $company->name }} </option>
+                            @endforeach
+                            </select>
+                        </label>
+                        <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0 " title="Clear Filter">Clear</button>
+                    </div>
+
+                    <div class="filter p-0">
+                        <label for="filter-position" class=""> Position
+                        <select id="filter-position" class="col-1 select2-filter" style="width: 200px">
+                            @foreach ( $positions  as $position )
                             <option value="{{ $position }}" class="" > {{ $position }} </option>
-                        @endforeach
-                     </select>
-                    <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>
-                </div>
+                            @endforeach
+                        </select>
+                        </label>
+                        <button class="btn-filter-clear bi bi-filter btn btn-outline-secondary rounded-1 px-0 py-0 mx-0" title="Clear Filter">Clear</button>
+                    </div>
+                  </div>
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
@@ -160,23 +174,12 @@
         <script type="module">
             $(function(){
 
-                //filterDropdown Company
-                $('#select').clone().attr("id","filter-company").prop('multiple', true).removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
-                .insertBefore('#filter-position')
-                .on('change', function() {
-                    table.search('').draw();
-                });
-                $('#filter-company option:selected').prop("selected" , false);
-
-                //filterDropdown Position
-                $("#filter-position").on('change', function() {
-                    table.search('').draw();
-                });
-
-                 $('#btn-filter-clear').click(function (e) {
-                    $('#filter-company option:selected').prop("selected" , false);
-                    $('#filter-position option:selected').prop("selected" , false);
-                    table.draw();
+                //Dropdown filter Initialize
+                $('.select2-filter').val(null).trigger('change');
+                $(".select2-filter").select2({
+                    theme: 'bootstrap-5',
+                    multiple: true,
+                    width: 'resolve'
                 });
 
                 let table = $('#myTable').DataTable({
@@ -306,6 +309,20 @@
                     columnDefs: [
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
+                });
+
+                //Dropdown filter
+                $('.select2-filter').on('change', function () {
+                    const ul = $(this).siblings('span.select2').find('ul')
+                    const count = $(this).select2('data').length
+                    if(count > 1){
+                        ul.html("<span>" +count+ " items selected</span>")
+                    }
+                    table.draw();
+                })
+
+                $('.btn-filter-clear').click(function (e) {
+                    $(this).siblings("label").children('select').val(null).trigger('change')
                 });
 
                 //sidebar

@@ -1,5 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap";
+@import "node_modules/select2/dist/css/select2.min.css";
+@import "node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
 
 /* navbar */
 .nav-right *:hover, .nav-left  > *:hover{
@@ -40,3 +42,56 @@
 }
 
 
+/*bug-fix-select2: cursor acts as a block element &  and unnecessary padding & */
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered {
+    display: inline !important;
+    padding-left: 5px;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+    display: inline-flex;
+    /* curson inline */
+    width: 170px;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered  .select2-selection__choice__display {
+    width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-search {
+    display: inline;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered {
+    display: inline;
+}
+
+.select2-container--bootstrap-5 .selection >  .select2-selection--multiple{
+    padding: 2px !important;
+}
+
+/* change height */
+.select2-selection.select2-selection--multiple {
+    min-height: 28px;
+    max-height: 28px;
+}
+
+
+.filter{
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    grid-template-rows: 50% 50%;
+    column-gap: 4px;
+}
+
+.filter > button{
+    grid-column: 2/3;
+    grid-row: 1/3;
+}
