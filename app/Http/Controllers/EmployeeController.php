@@ -50,7 +50,7 @@ class EmployeeController extends Controller
 
             $employees = ($searchCompany = $request->dropdowns['company'] ?? null) ?
                 $employees->whereHas('company', function ($q) use ($searchCompany) {
-                    $q->whereIn('id', $searchCompany);
+                    $q->whereIn('name', $searchCompany);
                 }) : $employees;
         };
 
