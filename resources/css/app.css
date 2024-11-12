@@ -83,15 +83,3 @@
     max-height: 28px;
 }
 
-
-.filter{
-    display: grid;
-    grid-template-columns: 1fr 40px;
-    grid-template-rows: 50% 50%;
-    column-gap: 4px;
-}
-
-.filter > button{
-    grid-column: 2/3;
-    grid-row: 1/3;
-}
