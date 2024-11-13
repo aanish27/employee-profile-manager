@@ -143,8 +143,8 @@
                   </div>
 
                   <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                    <x-dropdown-filter id="filter-company" name="Company" :collections="$companies" feild="name" width="200px" />
-                    <x-dropdown-filter id="filter-position" name="Position" :collections="$positions" feild="null" width="200px" />
+                    <x-dropdown-filter id="filter-company" name="Company" :collections="$companies" modal_id="id"  modal_name="name" />
+                    <x-dropdown-filter id="filter-position" name="Position" :collections="$positions"/>
                   </div>
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
@@ -211,7 +211,7 @@
                         data: function (d) {
                             const dropdowns = {};
                             dropdowns['position'] = ($("#filter-position").val().length === 0 ) ?  dropdowns['position'] : $("#filter-position").val();
-                            dropdowns['company'] = ($("#filter-company").val().length === 0) ? dropdowns['company'] : $("#filter-company").val() ;
+                            dropdowns['company'] = ($("#filter-company").val().length === 0) ? dropdowns['company'] : $("#filter-company").val();
                             d.dropdowns = dropdowns;
                         }
                     },
@@ -309,10 +309,14 @@
                     if(select.val().includes("btn_select_all")) {
                         const options = select.find('option')
                         options.prop('selected', true);
-                        ul.html("<span>" + options.length + " items selected</span>")
+                        ul.html("<span>" + (options.length - 1) + " items selected</span>")
+
+                        let values  = select.val()
+                        values.splice(0,1)
+                        select.val(values)
                     }
                     else if(count > 1){
-                    ul.html("<span>" +count+ " items selected</span>")
+                        ul.html("<span>" +count+ " items selected</span>")
                     }
                     table.draw();
                 })

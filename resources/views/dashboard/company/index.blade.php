@@ -109,7 +109,7 @@
             </div>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-              <x-dropdown-filter id="filter-country" name="Country" :collections="$countries" feild="null" width="200px" />
+              <x-dropdown-filter id="filter-country" name="Country" :collections="$countries"/>
             </div>
 
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
@@ -253,9 +253,13 @@
             const count = select.select2('data').length
 
             if(select.val().includes("btn_select_all")) {
-                const options = select.find('option')
-                options.prop('selected', true);
-                ul.html("<span>" + options.length + " items selected</span>")
+              const options = select.find('option')
+              options.prop('selected', true);
+              ul.html("<span>" + (options.length - 1) + " items selected</span>")
+
+              let values  = select.val()
+              values.splice(0,1)
+              select.val(values)
             }
             else if(count > 1){
               ul.html("<span>" +count+ " items selected</span>")
