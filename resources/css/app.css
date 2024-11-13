@@ -83,3 +83,11 @@
     max-height: 28px;
 }
 
+/* Hide Place Holder */
+.select2-search__field{
+    display: none;
+}
+/* Hide Clear */
+.select2-selection__choice__remove{
+    display: none;
+}

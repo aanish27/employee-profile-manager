@@ -161,6 +161,8 @@
                     theme: 'bootstrap-5',
                     multiple: true,
                     width: 'resolve',
+                    placeholder: 'Select',
+                    allowClear: true,
                 });
 
                 let table = $('#myTable').DataTable({
@@ -293,20 +295,26 @@
                 });
 
                 //Dropdown filter
+                $('.select2-filter').on('select2:clear', function () {
+                    table.draw();
+                })
+
                 $('.select2-filter').on('change', function () {
+                    if($(this).val().length == 0) return;
+
                     const select = $(this)
-                    const ul = $(this).siblings('span.select2').find('ul')
-                    const count = $(this).select2('data').length
-                    if($(this).val().includes("clear-btn")) {
-                        select.val(null).trigger("change");
+                    const ul = select.siblings('span.select2').find('ul')
+                    const count = select.select2('data').length
+
+                    if(select.val().includes("btn_select_all")) {
+                        const options = select.find('option')
+                        options.prop('selected', true);
+                        ul.html("<span>" + options.length + " items selected</span>")
                     }
                     else if(count > 1){
-                        ul.html("<span>" +count+ " items selected</span>")
-                        table.draw();
+                    ul.html("<span>" +count+ " items selected</span>")
                     }
-                    else{
-                        table.draw();
-                    }
+                    table.draw();
                 })
 
                 //sidebar
