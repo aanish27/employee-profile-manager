@@ -1,4 +1,9 @@
 <x-guest-layout>
+
+  <x-slot:title>
+    Login
+  </x-slot>
+
   <div class="form-signin w-25">
       <form method="POST" action="{{ route('login') }}">
           @csrf
