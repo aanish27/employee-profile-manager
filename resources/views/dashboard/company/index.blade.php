@@ -109,45 +109,28 @@
             </div>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                <select id="filter-country" class="form-control-sm col-1" aria-label="Default select example">
-                        <option hidden>Country</option>
-                        @foreach ( $countries  as $country )
-                            <option value="{{ $country }}" class="" > {{ $country }} </option>
-                        @endforeach
-                </select>
-                <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0 " title="Clear Filter">Clear</button>
-             </div>
+              <x-dropdown-filter id="filter-country" name="Country" :collections="$countries"/>
+            </div>
+
            <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
         </main>
       </div>
 
       <script type="module">
         $(function () {
+
+          //bug-fix-select2: auto select on page load
+          $('.select2-filter').val(null);
+          $(".select2-filter").select2({
+              theme: 'bootstrap-5',
+              multiple: true,
+              width: 'resolve',
+              placeholder: 'Select',
+              allowClear: true,
+          });
+
           let table= $('#myTable').DataTable({
             pageResize: true,
-            initComplete: function() {
-                      const table = this.api();
-                      table.columns().every(function() {
-                          table.search('');
-                          const column = this;
-
-                          switch (column.title()) {
-                              case 'Country':
-                                  $("#filter-country")
-                                  .on('change', function() {
-                                      column.search( $(this).val()).draw();
-                                  });
-                                  break;
-                              default:
-                                  return;
-                          }
-                      });
-
-                      $('#btn-filter-clear').click(function (e) {
-                          $('#filter-country option:selected').prop("selected" , false);
-                          table.columns().search('').draw();
-                      });
-                  },
             fixedColumns: true,
             scrollCollapse: true,
             scrollY: 7200,
@@ -185,8 +168,18 @@
             processing: true,
             ajax: {
                 url: 'company/draw',
+                data: function (d) {
+                    const dropdowns = {};
+                    dropdowns['country'] = ($("#filter-country").val().length === 0 ) ?  dropdowns['country'] : $("#filter-country").val();
+                    d.dropdowns = dropdowns;
+                }
             },
             columns: [
+              {
+                data: 'id',
+                title:'#',
+                name:'id',
+              },
               {
                 data: null ,
                 title: 'Actions',
@@ -204,6 +197,8 @@
                                           </svg>
                                       </button> `
                   },
+                  sortable: false,
+                  orderable: false,
               },
               {
                 data: 'name',
@@ -245,6 +240,32 @@
               { className: 'dt-head-left py-0', targets: '_all' },
             ],
           });
+
+          $('.select2-filter').on('select2:clear', function () {
+            table.draw();
+          })
+
+          $('.select2-filter').on('change', function () {
+            if($(this).val().length == 0) return;
+
+            const select = $(this)
+            const ul = select.siblings('span.select2').find('ul')
+            const count = select.select2('data').length
+
+            if(select.val().includes("btn_select_all")) {
+              const options = select.find('option')
+              options.prop('selected', true);
+              ul.html("<span>" + (options.length - 1) + " items selected</span>")
+
+              let values  = select.val()
+              values.splice(0,1)
+              select.val(values)
+            }
+            else if(count > 1){
+              ul.html("<span>" +count+ " items selected</span>")
+            }
+            table.draw();
+          })
 
           // sidebar
           $('#sidebar-toggle').on('click', function() {
@@ -301,6 +322,8 @@
                 displayToast(response , "error")
               });
           });
+
+
 
           // Clear Forms
           $('.btn-close').click(function (e) {

@@ -22,48 +22,33 @@ class CompanyController extends Controller
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
         $totalCompanys =   Company::count();
-        $dTcolumns = $request->query('columns');;
-        $filterDropDownValues = array();
 
-        if (is_null($search)) {
-            for ($x = 0; $x <= 6; $x++) {
-                if (!is_null($dTcolumns[$x]['search']['value'])) {
-                    $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
-                };
-            }
-        }
-
-        if(!empty($filterDropDownValues)){
-            $searchCountry = array_key_exists('country', $filterDropDownValues) ? $filterDropDownValues['country'] : null;
-            $companys = Company::where('country', 'like', "%" . $searchCountry . "%");
-
-        }else{
+        if(!$request->dropdowns){
             $companys = Company::where('name', 'like', "%" . $search . "%")
                 ->orWhere('country', 'like', "%" . $search . "%")
                 ->orWhere('branch', 'like', "%" . $search . "%")
                 ->orWhere('address', 'like', "%" . $search . "%");
+        }else{
+            $searchCountry = $request->dropdowns['country'] ?? null;
+            $companys = Company::whereIn('country', $searchCountry);
         }
 
-        if ($request->query('order') != null) {
-            if ($request->query('order')[0]['name'] != null) {
-                $companys->orderBy($request->query('order')[0]['name'],$request->query('order')['0']['dir']);
-                }
-            }
-
+        if ($order = $request->query('order')[0] ?? null) {
+            $orderDir = $order['dir'] ?? 'asc';
+            $companys->orderBy($order['name'], $orderDir);
+        }
 
         $filteredCompanys = $search ? $companys->count() : $totalCompanys;
         $companys = $companys->skip($start)
                                 ->take($length)
                                 ->withCount('employees','projects')->get();
 
-        $response = [
+        return Response::json([
             'draw' => intval($draw),
             'recordsTotal' => intval($totalCompanys),
             'recordsFiltered' => $filteredCompanys,
             'data' => $companys
-
-        ];
-        return Response::json($response);
+        ]);
     }
 
     public function store(Request $request)

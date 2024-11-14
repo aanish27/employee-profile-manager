@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-
 class EmployeeController extends Controller
 {
     public function index(Request $request){
@@ -26,87 +25,45 @@ class EmployeeController extends Controller
         $draw = $request->query('draw', 1);
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
-        $totalEmployees = Employee::count();
-        $filterDropDownValues = array();
-        $dTcolumns = $request->query('columns');
-
-        //checking if dropdown filter is filled
-        // if(is_null($search)){
-        //     for ($x = 0; $x <= 9; $x++) {
-        //         if(!is_null($dTcolumns[$x]['search']['value'])){
-        //             $filterDropDownValues[$dTcolumns[$x]['data']] = $dTcolumns[$x]['search']['value'];
-        //         };
-        //     }
-        // }
+        $totalEmployees =   Employee::count();
 
         $employees = Employee::with('company' , 'bankAccount');
 
-        #dropdown
-        if(!empty($filterDropDownValues)){
-            $searchPosition = array_key_exists('position', $filterDropDownValues) ? $filterDropDownValues['position'] : null;
-            $searchCompany = array_key_exists('company_name', $filterDropDownValues) ? $filterDropDownValues['company_name'] : null;
-
-            $employees
-                ->where('position', 'like', "%" . $searchPosition . "%")
-                ->where('companies.name', 'like', "%" . $searchCompany . "%");
-            }//dropdown filter null
-            else{
-            $employees
-                ->where('name', 'like', "%" . $search . "%")
+        if(!$request->dropdowns){
+            $employees->where('name', 'like', "%" . $search . "%")
                 ->orWhere('position', 'like', "%" . $search . "%")
                 ->orWhere('email', 'like', "%" . $search . "%")
                 ->orWhere('address', 'like', "%" . $search . "%")
                 ->orWhere('dob', 'like', "%" . $search . "%")
                 ->orWhere('phone', 'like', "%" . $search . "%")
-                ->orWhereHas('bankAccount',function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
+                ->orWhereHas('bankAccount', function ($q) use ($search) { //this is a closure function uk js closure..$q is the query of the modal and $search is passing the variale to closure as it cant accessthe varibales out of the fucnions
                     $q->where('account_no', 'like', "%" . $search . "%");
                 })
                 ->orWhereHas('company', function ($q) use ($search) {
-                    $q->where('companies.name', 'like', "%" . $search . "%")
-                    ->orWhere('companies.branch', 'like', "%" . $search . "%");
+                    $q->where('name', 'like', "%" . $search . "%")
+                        ->orWhere('branch', 'like', "%" . $search . "%");
                 });
         }
+        else{
+            $employees = ($searchPosition = $request->dropdowns['position'] ?? null) ?
+                $employees->whereIn('position', $searchPosition) : $employees;
 
-        #column ordering
-        if ($request->query('order') != null){
-            if($request->query('order')[0]['name'] != null){
-                $orderCol = $request->query('order')[0]['name'];
-                $orderDir = $request->query('order')['0']['dir'];
-                if ($orderCol === 'company.branch') {
-                    $employees->orderBy(
-                        Company::select('branch')
-                            ->whereColumn('companies.id', 'employees.company_id')
-                            ->withTrashed(),
-                        $orderDir);
-                } elseif ($orderCol === 'company.name') {
-                    $employees->orderBy(
-                        Company::select('name')
-                            ->whereColumn('companies.id', 'employees.company_id')
-                            ->withTrashed(),
-                        $orderDir);
-                } elseif ($orderCol === 'bank_account.account_no') {
-                    $employees->orderBy(
-                        BankAccount::select('account_no')
-                            ->whereColumn('employees.id', 'bank_accounts.employee_id'),
-                        $orderDir);
-                }else{
-                    $employees->orderBy($orderCol,$orderDir);
-                }
-            }
+            $employees = ($searchCompany = $request->dropdowns['company'] ?? null) ?
+                $employees->whereHas('company', function ($q) use ($searchCompany) {
+                    $q->whereIn('id', $searchCompany);
+                }) : $employees;
         };
 
 
-        // #column ordering
-        // if (!is_null($request->query('order'))) {
-        //     $num = $request->query('order')['0']['column'];
-        //     $orderDir = $request->query('order')['0']['dir'];
-        //     if(!$num == 0){
-
-        //         $employees = ($orderDir == 'desc')
-        //                 ? $employees->orderBy('company_id', $orderDir)
-        //                 : $employees->orderBy('company_id', $orderDir);
-        //     }
-        // };
+        if ($order = $request->query('order')[0] ?? null) {
+            $orderDir = $order['dir'] ?? 'asc';
+            $mapping = [
+                'company.branch' => Company::select('branch')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
+                'company.name' => Company::select('name')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
+                'bank_account.account_no' => BankAccount::select('account_no')->whereColumn('employees.id', 'bank_accounts.employee_id')
+            ];
+            $employees->orderBy($mapping[$order['name']] ?? $order['name'], $orderDir);
+        }
 
         $filteredEmployees = $search ? $employees->count() : $totalEmployees;
         $employees = $employees->skip($start)
