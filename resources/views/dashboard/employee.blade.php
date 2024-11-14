@@ -1,11 +1,8 @@
-@section('title', 'Employee Manager')
-@extends('layouts.module')
-@section('main')
-
+<x-app-layout>
+<x-slot:title> Employee Manger </x-slot:title>
 <div class="content w-100">
-    <x-nav-bar title="Employee Manager"/>
-    <main class="container.fluid p-3" >
-
+    <div class="container-fluid " >
+        <x-toast-message/>
         <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
             <div class="modal-dialog ">
@@ -114,7 +111,7 @@
 
         <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
-    </main>
+    </div>
 </div>
 
 <script type="module">
@@ -426,4 +423,4 @@
         }
     });
 </script>
-@endsection
+</x-app-layout>
