@@ -14,7 +14,7 @@ class EmployeeController extends Controller
     public function index(Request $request){
         $companies = Company::withTrashed()->get();
         $positions = Employee::pluck('position');
-        return view('dashboard.employee.index' , [ 'companies' => $companies , 'positions' => $positions ]);
+        return view('dashboard.employee' , [ 'companies' => $companies , 'positions' => $positions ]);
     }
 
     public function draw(Request $request){
