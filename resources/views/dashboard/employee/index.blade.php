@@ -142,15 +142,10 @@
                     </div>
                   </div>
 
-                <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
-                    <select id="filter-position" class="form-control-sm py-0 px-1 col-1" aria-label="Default select example">
-                        <option hidden>Position</option>
-                        @foreach ( $positions  as $position )
-                            <option value="{{ $position }}" class="" > {{ $position }} </option>
-                        @endforeach
-                     </select>
-                    <button id="btn-filter-clear" class="bi bi-filter btn btn-outline-secondary rounded-1 px-1 py-1 mx-0" title="Clear Filter">Clear</button>
-                </div>
+                  <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
+                    <x-dropdown-filter id="filter-company" name="Company" :collections="$companies" modal_id="id"  modal_name="name" />
+                    <x-dropdown-filter id="filter-position" name="Position" :collections="$positions"/>
+                  </div>
 
                 <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%"></table>
 
@@ -159,40 +154,19 @@
 
         <script type="module">
             $(function(){
+
+                //Dropdown filter Initialize
+                $('.select2-filter').val(null);
+                $(".select2-filter").select2({
+                    theme: 'bootstrap-5',
+                    multiple: true,
+                    width: 'resolve',
+                    placeholder: 'Select',
+                    allowClear: true,
+                });
+
                 let table = $('#myTable').DataTable({
                     pageResize: true,
-                    initComplete: function() {
-                        const table = this.api();
-
-                        table.columns().every(function() {
-                            table.search('');
-                            const column = this;
-                            switch (this.title()) {
-                                case 'Company':
-                                    $('#select').clone().attr("id","filter-company").removeClass(['form-control' , 'form-select']).addClass(['form-control-sm' , 'col-1'])
-                                    .insertBefore('#filter-position')
-                                    .on('change', function() {
-                                        const val = $(this).find(":selected").data("val");
-                                        column.search(val).draw();
-                                    });
-                                    break;
-                                case 'Position':
-                                    $("#filter-position").on('change', function() {
-                                        column.search( $(this).val()).draw();
-                                    });
-                                    break;
-                                default:
-                                    return;
-                            }
-                        });
-
-                        $('#btn-filter-clear').click(function (e) {
-                            $('#filter-company option:selected').prop("selected" , false);
-                            $('#filter-position option:selected').prop("selected" , false);
-                            table.columns().search('').draw();
-                        });
-
-                    },
                     scrollCollapse: true,
                     scrollX: true,
                     scrollY: 720,
@@ -234,9 +208,15 @@
                     processing: true,
                     ajax: {
                         url: 'employee/draw',
+                        data: function (d) {
+                            const dropdowns = {};
+                            dropdowns['position'] = ($("#filter-position").val().length === 0 ) ?  dropdowns['position'] : $("#filter-position").val();
+                            dropdowns['company'] = ($("#filter-company").val().length === 0) ? dropdowns['company'] : $("#filter-company").val();
+                            d.dropdowns = dropdowns;
+                        }
                     },
                     columns: [
-                          {
+                        {
                             data: 'id' ,
                             title: '#' ,
                             name: 'id',
@@ -264,7 +244,6 @@
                             render: DataTable.render.ellipsis( 26 )
                         },
                         {
-
                             data: 'company.branch',
                             title:'Branch' ,
                             name: 'company.branch',
@@ -287,7 +266,6 @@
                             data: 'dob',
                             title:'DOB' ,
                             name: 'dob',
-
                         },
                         {
                             data: 'email' ,
@@ -315,6 +293,33 @@
                         { className: 'dt-head-left py-0', targets: '_all' },
                     ],
                 });
+
+                //Dropdown filter
+                $('.select2-filter').on('select2:clear', function () {
+                    table.draw();
+                })
+
+                $('.select2-filter').on('change', function () {
+                    if($(this).val().length == 0) return;
+
+                    const select = $(this)
+                    const ul = select.siblings('span.select2').find('ul')
+                    const count = select.select2('data').length
+
+                    if(select.val().includes("btn_select_all")) {
+                        const options = select.find('option')
+                        options.prop('selected', true);
+                        ul.html("<span>" + (options.length - 1) + " items selected</span>")
+
+                        let values  = select.val()
+                        values.splice(0,1)
+                        select.val(values)
+                    }
+                    else if(count > 1){
+                        ul.html("<span>" +count+ " items selected</span>")
+                    }
+                    table.draw();
+                })
 
                 //sidebar
                 $('#sidebar-toggle').on('click', function() {
