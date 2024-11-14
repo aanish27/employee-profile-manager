@@ -20,11 +20,12 @@ class Employee extends Model
         'phone',
         'address',
         'company_id'
+
     ];
 
-    public function company():BelongsTo
+    public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->withTrashed();
     }
 
     public function projects(): BelongsToMany
