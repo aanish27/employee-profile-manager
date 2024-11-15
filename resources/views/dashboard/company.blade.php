@@ -1,10 +1,9 @@
-@section('title', 'Company Manager')
-@extends('layouts.module')
+<x-app-layout>
+<x-slot:title> Company Manager </x-slot:title>
 
-@section('main')
-  <div class="content w-100">
-    <x-nav-bar title="Company Manager"/>
-    <main class="container.fluid p-3">
+<div class="content w-100">
+
+    <div class="container-fluid p-3">
       <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
           <div class="modal-dialog ">
@@ -80,7 +79,7 @@
         </div>
 
         <table id="myTable" class="table table-hover table-nowrap table-bordered shadow-sm"  width="100%" ></table>
-    </main>
+    </div>
   </div>
   <script type="module">
     $(function () {
@@ -358,4 +357,8 @@
       }
     });
   </script>
-@endsection
+</x-app-layout>
+
+
+
+
