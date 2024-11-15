@@ -9,9 +9,9 @@
         @vite([ 'resources/css/app.css', 'resources/js/app.js',])
     </head>
 
-    <body class="container-fluid p-0 d-flex">
+    <body class="container-fluid w-100 p-0 d-flex">
         <x-sidebar/>
-        <div class="w-100 p-0">
+        <div class="main-layout p-0">
             <x-toast-message/>
             <x-nav-bar title="{{ $title }}"/>
             <main>
