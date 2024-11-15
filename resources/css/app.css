@@ -3,6 +3,11 @@
 @import "select2/dist/css/select2.min.css";
 @import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
 
+html,
+body {
+    height: 100%;
+}
+
 /* navbar */
 .nav-right *:hover, .nav-left  > *:hover{
     opacity: 0.6;
@@ -77,3 +82,19 @@
     display: none;
 }
 
+/* sign-in */
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
