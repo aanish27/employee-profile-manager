@@ -162,17 +162,11 @@
                 }
             },
             columns: [
-                    {
+                {
                     data: 'id',
                     title:'#' ,
                     name: 'id',
 
-                },
-                {
-                    data: 'id' ,
-                    title: '#' ,
-                    name: 'id',
-                    render: DataTable.render.ellipsis( 26 )
                 },
                 {
                     data: null ,
