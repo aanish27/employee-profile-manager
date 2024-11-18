@@ -2,7 +2,6 @@
 <x-slot:title> Company Manager </x-slot:title>
 
 <div class="content w-100">
-
     <div class="container-fluid p-3">
       <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
@@ -56,23 +55,7 @@
           </div>
         </div>
 
-        <!-- Delete Modal -->
-        <div class="modal fade" id="deletConfirmation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deletConfirmationLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deletConfirmationLabel">Are You Sure to Delete the Company?? </h1>
-                <button type="button" class="btn-close btn-close-dlt" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                This Action wil Delete Company and the records related to him Such as Employees and Projects
-              </div>
-              <div class="modal-footer">
-                <button type="button" id="btn-dlt"  class="btn btn-dlt btn-danger rounded-2 px-3 py-0">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <x-delete-modal/>
 
         <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
           <x-dropdown-filter id="filter-country" name="Country" :collections="$countries"/>
@@ -249,18 +232,23 @@
           selector: '[data-bs-toggle="tooltip"]',
       });
 
-      // Delete Company
+      //Dlt Modal Open
       $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
-          $('#btn-dlt').text('Delete').attr('data-id' , table.row($(this).parents('tr')).data().id)
+          const data = table.row($(this).parents('tr')).data();
+          $('#deletConfirmationLabel').text('Are you sure to delete the Details of ' + data.name )
+          $('.delete-modal-body').text('This action will delete all details related to the ' + data.name +', including information on '+ data.projects_count + ' projects and ' + data.employees_count + ' employees' )
+          $('#btn-dlt').attr('data-id' , data.id)
       });
+
+      //Dlt Modal Btn
       $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
           axios.delete(`companys/${$(this).attr('data-id')}`)
           .then(function (response){
+              table.draw(false);
               displayToast(response , "success")
-                $('.btn-close-dlt').click();
+              $('.btn-close-dlt').click();
           });
-          table.draw(false);
-      })
+      });
 
       //Store Company Axios
       function storeCompany(){

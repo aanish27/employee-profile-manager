@@ -2,7 +2,6 @@
 <x-slot:title> Employee Manger </x-slot:title>
 <div class="content w-100">
     <div class="container-fluid " >
-        <x-toast-message/>
         <div class="modal fade modal-lg"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div id="validation-errors" style="display: none;" class="position-absolute top-0 end-0  w-25" role="alert"></div>
             <div class="modal-dialog ">
@@ -87,22 +86,7 @@
             </div>
 
             <!-- Delete Modal -->
-            <div class="modal fade" id="deletConfirmation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deletConfirmationLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deletConfirmationLabel">Are You Sure to Delete the Employee?? </h1>
-                    <button type="button" class="btn-close btn-close-dlt" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    This Action wil Delete Employee and the records related to him Such as Bank Account of the employee
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btn-dlt"  class="btn btn-dlt btn-danger rounded-2 px-3 py-0">Delete</button>
-                </div>
-                </div>
-            </div>
-            </div>
+            <x-delete-modal/>
 
             <div id="table-filters" class="row row-cols-auto gap-2 mt-4 ms-0">
             <x-dropdown-filter id="filter-company" name="Company" :collections="$companies" modal_id="id"  modal_name="name" />
@@ -178,17 +162,11 @@
                 }
             },
             columns: [
-                    {
+                {
                     data: 'id',
                     title:'#' ,
                     name: 'id',
 
-                },
-                {
-                    data: 'id' ,
-                    title: '#' ,
-                    name: 'id',
-                    render: DataTable.render.ellipsis( 26 )
                 },
                 {
                     data: null ,
@@ -306,19 +284,25 @@
             selector: '[data-bs-toggle="tooltip"]',
         });
 
-        //dlt btn
+        //Dlt Modal Open
         $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
-            $('#btn-dlt').text('Delete').attr('data-id' , table.row($(this).parents('tr')).data().id)
+            const data = table.row($(this).parents('tr')).data();
+            $('#deletConfirmationLabel').text('Are you sure to delete the Details of ' + data.name )
+            $('.delete-modal-body').text('This action will delete the details of ' + data.name + ' and the bank account details associated with him/her.' )
+            $('#btn-dlt').attr('data-id' , data.id)
         });
 
+        //Dlt Modal Btn
         $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
             axios.delete(`employee/${$(this).attr('data-id')}`)
             .then(function (response){
+                table.draw(false);
                 displayToast(response , "success")
                 $('.btn-close-dlt').click();
             });
-            table.draw(false);
         });
+
+
 
         //Store Employee Axios
         function storeEmployee(){
