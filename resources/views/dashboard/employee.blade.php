@@ -10,44 +10,56 @@
                         <h4 class="fs-5 m-0" id="form-title"></h4>
                     <button type="button" id="btn-modal-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body m-0">
-                    <form class="form-modal row  p-1">
+                <div class="modal-body m-0 ">
+                    <form class="form-modal row  p-1  needs-validation"  novalidate>
                         @csrf
                         <div class="mb-2 col-3">
                             <label for="name" class="form-label fw-bold ">Name:</label>
-                            <input type="text" class=" form-control py-1 " id="name" name="name" placeholder="Full Name" required>
+                            <input type="text" class="form-control py-1 " id="name" name="name" placeholder="Full Name" required>
+                            <div class="invalid-feedback">Please Enter the Name</div>
+                            <div class="valid-feedback">Name Valid</div>
                         </div>
                         <div class=" mb-2 col-3">
                             <label class="form-label fw-bold" for="position">Position:</label>
                             <input type="text" class=" form-control py-1 " id="position" name="position" placeholder="Position" required>
+                            <div class="invalid-feedback">Please Enter the Position</div>
+                            <div class="valid-feedback">Position Valid</div>
                         </div>
                         <div class="mb-2 col-3" >
                             <label class="form-label fw-bold" for="dob">DOB:</label>
                             <input type="date" class=" form-control py-1 " id="dob" name="dob" placeholder="DOB" required>
+                            <div class="invalid-feedback">Please Enter the DOB</div>
+                            <div class="valid-feedback">DOB Valid</div>
                         </div>
                         <div class=" mb-2 col-3">
                             <label class="form-label fw-bold" for="email">Email:</label>
                             <input type="email" class=" form-control py-1 " id="email" name="email" placeholder="Email" required>
-
+                            <div class="invalid-feedback">Please Enter the Email</div>
+                            <div class="valid-feedback">Email Valid</div>
                         </div>
                         <div class=" mb-2 col-3">
                             <label class="form-label fw-bold" for="phone">Phone:</label>
                             <input type="phone" class=" form-control py-1 " id="phone" name="phone" placeholder="Phone" required>
-
+                            <div class="invalid-feedback">Please Enter the Phone Number</div>
+                            <div class="valid-feedback">Phone Number Valid</div>
                         </div>
                         <div class="col-9">
                             <label class="form-label fw-bold" for="address">Address:</label>
                             <input type="text" class=" form-control py-1 " id="address" name="address" placeholder="Address" required>
+                            <div class="invalid-feedback">Please Enter the Address</div>
+                            <div class="valid-feedback">Address Valid</div>
                         </div>
 
                         <div class="mt-2 mb-2 col-6 d-inline">
                             <label class="form-label fw-bold" for="select">Choose Company: </label>
-                            <select id="select" name="company_id" class="form-select form-control py-1  " aria-label="Default select example">
-                                <option hidden>Company</option>
+                            <select id="select" name="company_id" class="form-select py-1" required>
+                                <option hidden value="">Company</option>
                                 @foreach ( $companies  as $company )
                                     <option value="{{ $company->id }}" data-val="{{ $company->name }}" class="create-option {{ is_null($company->deleted_at) ? '' : 'trash' }}" data-branch="{{ $company->branch }}" > {{ $company->name }} </option>
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback">Please Choose A Compnay</div>
+                            <div class="valid-feedback">Company Valid</div>
                         </div>
 
                         <div class="mt-2 col-6">
@@ -60,21 +72,29 @@
                         <div class="mt-2 mb-2 col-6">
                             <label class="form-label fw-bold" for="beneficiary-name">Beneficiary Name:</label>
                             <input type="text" class=" form-control py-1 "  id="beneficiary-name" name="beneficiary_name" placeholder="Beneficiary Name" required>
+                            <div class="invalid-feedback">Please Enter the Name</div>
+                            <div class="valid-feedback">Name Valid</div>
                         </div>
 
                         <div class="mt-2 mb-2 col-6">
                             <label class="form-label fw-bold" for="bank-name">Bank Name</label>
                             <input type="text" class=" form-control py-1 " id="bank-name" name="bank_name" placeholder="Bank Name" required>
+                            <div class="invalid-feedback">Please Enter the Bank Name</div>
+                            <div class="valid-feedback">Bank Name Valid</div>
                         </div>
 
                         <div class="mb-2 col-6">
                             <label class="form-label fw-bold" for="bank-branch">Branch</label>
                             <input type="phone" class=" form-control py-1 " id="bank-branch" name="branch" placeholder="Branch" required>
+                            <div class="invalid-feedback">Please Enter the Branch</div>
+                            <div class="valid-feedback">Branch Valid</div>
                         </div>
 
                         <div class="mb-2 col-6">
                             <label class="form-label fw-bold" for="account-no">Account No:</label>
                             <input type="number" class=" form-control py-1 " id="account-no" name="account_no" placeholder="Account No" required>
+                            <div class="invalid-feedback">Please Enter the Account No</div>
+                            <div class="valid-feedback">Account No Valid</div>
                         </div>
                         <div class="modal-footer py-0 border-0 ">
                             <button type="submit" class="btn btn-primary rounded-2 px-3 py-1 m-0 " id="btn-submit"></button>
@@ -373,9 +393,17 @@
             });
         });
 
-        // Clear Forms
+        //Forms
+        $('.needs-validation').on('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault()
+                e.stopPropagation()
+            }
+            $(this).addClass('was-validated')
+        });
+
         $('.btn-close').click(function (e) {
-            $('.form-modal').trigger("reset");
+            $('.form-modal').trigger("reset").toggleClass('was-validated' , false);
         });
 
         // Set Branch on Selct
