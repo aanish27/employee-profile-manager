@@ -21,16 +21,16 @@ class EmployeeController extends Controller
 
         //SERVER SIDE RENDERING HANDLE FOR data table
         $search = $request->query('search')['value'];
-
         $draw = $request->query('draw', 1);
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
-        $totalEmployees =   Employee::count();
+        $employeeQuery = Employee::query();
+        $totalEmployees = $employeeQuery->count();
 
-        $employees = Employee::with('company' , 'bankAccount');
+        $employeeQuery->with('company' , 'bankAccount');
 
         if(!$request->dropdowns){
-            $employees->where('name', 'like', "%" . $search . "%")
+            $employeeQuery->where('name', 'like', "%" . $search . "%")
                 ->orWhere('position', 'like', "%" . $search . "%")
                 ->orWhere('email', 'like', "%" . $search . "%")
                 ->orWhere('address', 'like', "%" . $search . "%")
@@ -45,28 +45,29 @@ class EmployeeController extends Controller
                 });
         }
         else{
-            $employees = ($searchPosition = $request->dropdowns['position'] ?? null) ?
-                $employees->whereIn('position', $searchPosition) : $employees;
+            $employeeQuery = ($searchPosition = $request->dropdowns['position'] ?? null) ?
+                $employeeQuery->whereIn('position', $searchPosition) : $employeeQuery;
 
-            $employees = ($searchCompany = $request->dropdowns['company'] ?? null) ?
-                $employees->whereHas('company', function ($q) use ($searchCompany) {
+            $employeeQuery = ($searchCompany = $request->dropdowns['company'] ?? null) ?
+                $employeeQuery->whereHas('company', function ($q) use ($searchCompany) {
                     $q->whereIn('id', $searchCompany);
-                }) : $employees;
+                }) : $employeeQuery;
         };
 
 
         if ($order = $request->query('order')[0] ?? null) {
             $orderDir = $order['dir'] ?? 'asc';
+            $companysQuery = Company::query();
             $mapping = [
-                'company.branch' => Company::select('branch')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
-                'company.name' => Company::select('name')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
+                'company.branch' => $companysQuery->select('branch')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
+                'company.name' => $companysQuery->select('name')->whereColumn('companies.id', 'employees.company_id')->withTrashed(),
                 'bank_account.account_no' => BankAccount::select('account_no')->whereColumn('employees.id', 'bank_accounts.employee_id')
             ];
-            $employees->orderBy($mapping[$order['name']] ?? $order['name'], $orderDir);
+            $employeeQuery->orderBy($mapping[$order['name']] ?? $order['name'], $orderDir);
         }
 
-        $filteredEmployees = $search ? $employees->count() : $totalEmployees;
-        $employees = $employees->skip($start)
+        $filteredEmployees = $search ? $employeeQuery->count() : $totalEmployees;
+        $employees = $employeeQuery->skip($start)
                                 ->take($length)
                                 ->get();
 
@@ -148,8 +149,14 @@ class EmployeeController extends Controller
     }
 
     public function destroy(string $id){
-        $employee = Employee::find($id);
-        Employee::destroy($id);
-        return Response::json( "Employee " . $employee->name . " and related Bank Account Records were Deleted");
+        try {
+            $employee = Employee::find($id);
+            $msg = "Employee " . $employee->name . " and related Bank Account Records were Deleted";
+            $employee->destroy($id);
+            return Response::json($msg);
+        } catch(ValidationException $e) {
+            return Response::json($e->errors(), 422);
+        }
+
     }
 }
