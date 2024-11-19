@@ -13,11 +13,11 @@ class Project extends Model
 
     public function employees(): BelongsToMany
     {
-        return $this->belongsToMany(Employee::class , 'project_eployee' , 'employee_id');
+        return $this->belongsToMany(Employee::class , 'employee_project' , 'employee_id');
     }
 
     public function company():BelongsTo
     {
-        return $this->belongsTo(Company::class ,'id');
+        return $this->belongsTo(Company::class , 'company_id' , 'id');
     }
 }
