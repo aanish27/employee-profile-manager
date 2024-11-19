@@ -285,6 +285,7 @@
         });
 
         //Dlt Modal Open
+        let data = null
         $('#myTable tbody').on('click' , '.btn-dlt-modal' ,function (e) {
             const data = table.row($(this).parents('tr')).data();
             $('#deletConfirmationLabel').text('Are you sure to delete the Details of ' + data.name )
@@ -294,6 +295,8 @@
 
         //Dlt Modal Btn
         $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
+            if( data == $(this).attr('data-id')) return;
+            data = $(this).attr('data-id')
             axios.delete(`employee/${$(this).attr('data-id')}`)
             .then(function (response){
                 table.draw(false);
@@ -301,8 +304,6 @@
                 $('.btn-close-dlt').click();
             });
         });
-
-
 
         //Store Employee Axios
         function storeEmployee(){
