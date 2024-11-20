@@ -148,8 +148,12 @@ class EmployeeController extends Controller
     }
 
     public function destroy(string $id){
-        $employee = Employee::find($id);
-        Employee::destroy($id);
-        return Response::json( "Employee " . $employee->name . " and related Bank Account Records were Deleted");
+        $employee = Employee::withTrashed()->find($id);
+        if ($employee->deleted_at) {
+            return Response::json("Employee " . $employee->name . " and related Bank Account Records were Already Deleted");
+        } else {
+            $employee->delete();
+            return Response::json("Employee " . $employee->name . " and related Bank Account Records were Deleted");
+        };
     }
 }
