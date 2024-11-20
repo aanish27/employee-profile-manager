@@ -241,10 +241,7 @@
       });
 
       //Dlt Modal Btn
-      let data = null
       $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
-        if( data == $(this).attr('data-id')) return;
-        data = $(this).attr('data-id')
           axios.delete(`companys/${$(this).attr('data-id')}`)
           .then(function (response){
               $('.btn-close-dlt').click();

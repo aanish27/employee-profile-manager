@@ -107,9 +107,13 @@ class CompanyController extends Controller
 
     public function destroy(string $id)
     {
-        $company = Company::find($id);
+        $company = Company::withTrashed()->find($id);
         $projects = $company->projects()->count();
-        Company::destroy($id);
-        return Response::json( "The Company " . $company->name . ", and ". $projects ." related project records Were Deleted");
+        if($company->deleted_at){
+            return Response::json("The Company " . $company->name . ", and " . $projects . " related project Were Alredy Deleted");
+        }else{
+            $company->delete();
+            return Response::json("The Company " . $company->name . ", and " . $projects . " related project records Were Deleted");
+        };
     }
 }
