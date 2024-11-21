@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -13,7 +14,7 @@ class CompanyController extends Controller
     {
         $companys = Company::all();
         $countries = Company::pluck('country');
-        return view('dashboard.company.index', ['companys' => $companys , 'countries' => $countries]);
+        return view('dashboard.company', ['companys' => $companys , 'countries' => $countries]);
     }
 
     public function draw(Request $request){
@@ -21,16 +22,17 @@ class CompanyController extends Controller
         $draw = $request->query('draw', 1);
         $start = $request->query('start', 0);
         $length = $request->query('length', 10);
-        $totalCompanys =   Company::count();
+        $companysQuery = Company::query();
+        $totalCompanys = $companysQuery->count();
 
         if(!$request->dropdowns){
-            $companys = Company::where('name', 'like', "%" . $search . "%")
+            $companys = $companysQuery->where('name', 'like', "%" . $search . "%")
                 ->orWhere('country', 'like', "%" . $search . "%")
                 ->orWhere('branch', 'like', "%" . $search . "%")
                 ->orWhere('address', 'like', "%" . $search . "%");
         }else{
             $searchCountry = $request->dropdowns['country'] ?? null;
-            $companys = Company::whereIn('country', $searchCountry);
+            $companys = $companysQuery->whereIn('country', $searchCountry);
         }
 
         if ($order = $request->query('order')[0] ?? null) {
@@ -71,9 +73,7 @@ class CompanyController extends Controller
 
     public function show(string $id)
     {
-        $company = Company::find($id);
-        $companyEmployees = $company->employees;
-        return view('company.show' , ['companyEmployees' => $companyEmployees , 'company' => $company ]);
+        
     }
 
     public function edit(string $id)
@@ -107,9 +107,18 @@ class CompanyController extends Controller
 
     public function destroy(string $id)
     {
-        $company = Company::find($id);
-        $projects = $company->projects()->count();
-        Company::destroy($id);
-        return Response::json( "The Company " . $company->name . ", and ". $projects ." related project records Were Deleted");
+        try {
+            $company = Company::withTrashed()->find($id);
+            $projects = $company->projects()->count();
+            if($company->deleted_at){
+                return Response::json("The Company " . $company->name . ", and " . $projects . " related project Were Alredy Deleted");
+            }else{
+                $company->delete();
+                return Response::json("The Company " . $company->name . ", and " . $projects . " related project records Were Deleted");
+            };
+        } catch (ValidationException $e) {
+            return Response::json($e->errors(), 422);
+        }
+
     }
 }

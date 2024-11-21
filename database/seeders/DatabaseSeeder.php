@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' =>  Hash::make('password')
         ]);
+        User::factory()->create([
+            'name' => 'aanish',
+            'email' => 'aanish@example.com',
+            'password' =>  Hash::make('password')
+        ]);
 
         for ($i=0; $i < 1000 ; $i++) {
             DB::table('employee_project')->insert([
