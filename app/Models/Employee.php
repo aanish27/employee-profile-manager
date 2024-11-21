@@ -26,16 +26,16 @@ class Employee extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class)->withTrashed();
+        return $this->belongsTo(Company::class , 'company_id', 'id')->withTrashed();
     }
 
     public function projects(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class , 'employee_project' , 'project_id');
     }
 
     public function bankAccount(): HasOne
     {
-        return $this->hasOne(BankAccount::class);
+        return $this->hasOne(BankAccount::class , 'employee_id' , 'id');
     }
 }
