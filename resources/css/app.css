@@ -91,7 +91,7 @@ body {
     z-index: 2;
 }
 
-.form-auth input[type="email"] {
+.form-auth input[type="email"] , input[type="text"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
