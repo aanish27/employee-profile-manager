@@ -12,26 +12,34 @@
                 <button type="button" id="btn-modal-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body m-0">
-                <form class="form-modal row p-1">
+                <form class="form-modal row p-1  needs-validation" novalidate>
                   @csrf
                   <div class="mb-2 col-6">
                     <label for="name" class="form-label fw-bold ">Name:</label>
-                    <input type="text" class=" form-control py-1" id="name" name="name" placeholder="Name">
+                    <input type="text" class=" form-control py-1" id="name" name="name" placeholder="Name" required>
+                    <div class="invalid-feedback">Please Enter the Company name</div>
+                    <div class="valid-feedback"> Valid Company name</div>
                   </div>
 
                   <div class="mb-2 col-6">
                     <label for="branch" class="form-label fw-bold ">Branch:</label>
-                    <input type="text" class=" form-control py-1" id="branch" name="branch" placeholder="Branch">
+                    <input type="text" class=" form-control py-1" id="branch" name="branch" placeholder="Branch" required>
+                    <div class="invalid-feedback">Please Enter the Branch name</div>
+                    <div class="valid-feedback"> Valid Branch name</div>
                   </div>
 
                   <div class="mb-2 col-6">
                     <label for="branch" class="form-label fw-bold ">Country:</label>
-                    <input type="text" class=" form-control py-1" id="country" name="country" placeholder="Country">
+                    <input type="text" class=" form-control py-1" id="country" name="country" placeholder="Country" required>
+                    <div class="invalid-feedback">Please Enter the Country name</div>
+                    <div class="valid-feedback"> Valid Country name</div>
                   </div>
 
                   <div class="mb-2 col-6">
                     <label for="branch" class="form-label fw-bold ">Address:</label>
-                    <input type="text" class=" form-control py-1" id="address" name="address" placeholder="Address">
+                    <input type="text" class=" form-control py-1" id="address" name="address" placeholder="Address" required>
+                    <div class="invalid-feedback">Please Enter the Address</div>
+                    <div class="valid-feedback"> Valid Address</div>
                   </div>
 
                   <input type="hidden" class=" form-control py-1" id="company_id" name="company_id">
@@ -244,9 +252,9 @@
       $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
           axios.delete(`companys/${$(this).attr('data-id')}`)
           .then(function (response){
+              $('.btn-close-dlt').click();
               table.draw(false);
               displayToast(response , "success")
-              $('.btn-close-dlt').click();
           });
       });
 
@@ -276,11 +284,17 @@
           });
       });
 
-
-
       // Clear Forms
+      $('.needs-validation').on('submit', function (e) {
+        if (!this.checkValidity()) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
+        $(this).addClass('was-validated')
+      });
+
       $('.btn-close').click(function (e) {
-        $('.form-modal').trigger("reset");
+        $('.form-modal').trigger("reset").toggleClass('was-validated' , false);
       });
 
       // Edit Company

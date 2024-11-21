@@ -22,11 +22,11 @@ class Company extends Model
 
     public function employees(): HasMany
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class , 'company_id' , 'id');
     }
 
     public function projects(): HasMany
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class , 'company_id' , 'id');
     }
 }

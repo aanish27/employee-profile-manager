@@ -73,9 +73,7 @@ class CompanyController extends Controller
 
     public function show(string $id)
     {
-        $company = Company::find($id);
-        $companyEmployees = $company->employees;
-        return view('company.show' , ['companyEmployees' => $companyEmployees , 'company' => $company ]);
+        
     }
 
     public function edit(string $id)
@@ -110,13 +108,17 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         try {
-            $company = Company::find($id);
+            $company = Company::withTrashed()->find($id);
             $projects = $company->projects()->count();
-            $msg = "The Company " . $company->name . ", and " . $projects . " related project records Were Deleted";
-            $company->destroy($id);
-            return Response::json($msg);
+            if($company->deleted_at){
+                return Response::json("The Company " . $company->name . ", and " . $projects . " related project Were Alredy Deleted");
+            }else{
+                $company->delete();
+                return Response::json("The Company " . $company->name . ", and " . $projects . " related project records Were Deleted");
+            };
         } catch (ValidationException $e) {
             return Response::json($e->errors(), 422);
         }
+
     }
 }
