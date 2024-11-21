@@ -244,9 +244,9 @@
       $('#deletConfirmation .modal-footer').on('click' , '#btn-dlt' , function (e) {
           axios.delete(`companys/${$(this).attr('data-id')}`)
           .then(function (response){
+              $('.btn-close-dlt').click();
               table.draw(false);
               displayToast(response , "success")
-              $('.btn-close-dlt').click();
           });
       });
 

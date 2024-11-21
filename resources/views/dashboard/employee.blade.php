@@ -302,8 +302,6 @@
             });
         });
 
-
-
         //Store Employee Axios
         function storeEmployee(){
             $('.form-modal').attr("id","form-create");
