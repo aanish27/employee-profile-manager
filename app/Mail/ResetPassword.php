@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-
+use Illuminate\Mail\Mailables\Address;
 
 class ResetPassword extends Mailable
 {
@@ -18,10 +18,10 @@ class ResetPassword extends Mailable
      * Create a new message instance.
      */
     public function __construct(
+        protected string $token,
+        protected string $toMail,
 
-
-    )
-    {}
+    ) {}
 
     /**
      * Get the message envelope.
@@ -29,7 +29,8 @@ class ResetPassword extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-
+            from: new Address('vistag@mail.com', 'Support Team'),
+            subject: 'Reset Password',
         );
     }
 
@@ -38,9 +39,12 @@ class ResetPassword extends Mailable
      */
     public function content(): Content
     {
+        $url = url()->query('reset-password/' . $this->token, ['email' => $this->toMail]);
         return new Content(
             markdown: 'emails.auth.reset-password',
-
+            with: [
+                'resetUrl' => $url
+            ]
         );
     }
 

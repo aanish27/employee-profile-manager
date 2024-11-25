@@ -3,7 +3,7 @@
 
 The body of your I DID IT.
 
-<x-mail::button :url="''">
+<x-mail::button :url="$resetUrl">
 Button Text
 </x-mail::button>
 

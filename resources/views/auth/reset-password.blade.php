@@ -10,7 +10,7 @@
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
             <div class="form-floating">
-                <input type="email" class="form-control floatingInput" id="email" name="email"  value={{ $request->email }}  required autofocus>
+                <input type="email" class="form-control floatingInput" id="email" name="email"  value="{{ $request->email }}"  required autofocus>
                 <label for="email">Email</label>
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
