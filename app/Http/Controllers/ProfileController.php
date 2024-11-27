@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
 class ProfileController extends Controller
 {
     /**
@@ -26,13 +27,19 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validate([
+            'profile_pic' => 'image',
+            'name' => 'required',
+            'email' => 'required',
+        ]);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $path = $request->file('profile_pic')->store('images/profile_pics');
+        $validated['profile_pic'] = $path;
+        $request->user()->update($validated);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
