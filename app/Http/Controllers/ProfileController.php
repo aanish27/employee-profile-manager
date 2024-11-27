@@ -37,8 +37,11 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
-        $path = $request->file('profile_pic')->store('images/profile_pics');
-        $validated['profile_pic'] = $path;
+        if($request->file('profile_pic')){
+            $path = $request->file('profile_pic')->store('images/profile_pics');
+            $validated['profile_pic'] = $path;
+        }
+
         $request->user()->update($validated);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
