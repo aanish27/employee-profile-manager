@@ -1,4 +1,4 @@
-<div id="sidebar-long" class="d-flex flex-column  p-3 text-bg-dark d-none" style="min-width: 200px; min-height: 100vh;">
+<div id="sidebar-long" class="d-flex flex-column  p-3 text-bg-dark d-none h-100" style="min-width: 200px; min-height: 100vh;">
     <a href="/" class="d-flex align-items-center text-light text-decoration-none">
         <i class="bi bi-amazon me-2 fs-3"></i>
         <span class="fs-5">Vista G</span>
@@ -24,26 +24,10 @@
             </a>
         </li>
     </ul>
-    <hr>
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ asset('images/logo.webp') }}" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>{{ Auth::user()->name }}</strong>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow p-1">
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><hr class="dropdown-divider mb-0 mt-0""></li>
-            <li>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item " style=""> Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            </li>
-        </ul>
-    </div>
+    <x-drop-down-side-bar :open="true" />
 </div>
 
-<div id="sidebar-short" class="d-flex flex-column flex-shrink-0 bg-dark " style="width: 3.6rem; min-height: 100vh;">
+<div id="sidebar-short" class="d-flex flex-column flex-shrink-0 bg-dark h-100 " style="width: 3.6rem; min-height: 100vh;">
     <a href="/" class="d-block p-1 text-center link-body-emphasis text-decoration-none" title="Vista G" data-bs-toggle="tooltip" data-bs-placement="right">
         <i class="bi bi-amazon fs-2 text-light"></i>
         <span class="visually-hidden">Icon-only</span>
@@ -66,17 +50,7 @@
             </a>
         </li>
     </ul>
-
-    <div class="dropdown border-top">
-        <a href="#" class="d-flex align-items-center text-light  justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ asset('images/logo.webp') }}" alt="" width="32" height="32" class="rounded-circle me-2">
-        </a>
-        <ul class="dropdown-menu text-small shadow p-1">
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><hr class="dropdown-divider mb-0 mt-0"></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-        </ul>
-    </div>
+    <x-drop-down-side-bar />
 </div>
 
 
