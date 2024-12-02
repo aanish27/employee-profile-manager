@@ -18,6 +18,12 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('user.index') }}" class="nav-link p-1 my-1 btn-user">
+                <i class="bi bi-person-badge pe-1 fs-5"></i>
+                User
+            </a>
+        </li>
+        <li>
             <a href="#" class="nav-link p-1 my-1 ">
                 <i class="bi bi-clipboard-data pe-1 fs-5"></i>
                 Dashboard
@@ -58,6 +64,11 @@
         <li>
             <a href="{{ route('employee') }}" class="nav-link   border-bottom rounded-0 btn-employee" title="Employee" data-bs-toggle="tooltip" data-bs-placement="right">
                 <i class="bi bi-person fs-4 text-center"></i>
+            </a>
+        </li>
+        <li>
+             <a href="{{ route('user.index') }}" class="nav-link   border-bottom rounded-0 btn-user" title="User" data-bs-toggle="tooltip" data-bs-placement="right">
+                <i class="bi bi-person-badge fs-4 text-center"></i>
             </a>
         </li>
         <li>
