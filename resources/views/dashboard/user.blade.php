@@ -28,16 +28,27 @@
           },
           topEnd:{
               buttons: [{
+                  text: 'PDF',
+                  attr: {
+                      id: 'btn-add-record',
+                      class: 'bi bi-filetype-pdf btn btn-outline-primary rounded-2 px-3 py-0 mx-2' ,
+                  },
+                  action: function (e, dt, node, config, cb) {
+                      pdf()
+                  },
+              },
+              {
                   text: 'New',
                   attr: {
                       id: 'btn-add-record',
                       'data-bs-toggle': 'modal',
                       'data-bs-target': '.modal',
                       class: 'bi bi-plus-lg btn btn-outline-primary rounded-2 px-3 py-0' ,
+
                   },
                   action: function (e, dt, node, config, cb) {
                       storeUser()
-                  }
+                  },
               }]
           }
         },
@@ -105,6 +116,10 @@
           { className: 'dt-head-left py-0', targets: '_all' },
         ],
       });
+
+      function pdf(){
+        window.open("user/createPDF", "_blank");
+      }
 
       // sidebar
       $('#sidebar-toggle').on('click', function() {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use Mpdf\Mpdf;
 
 class UserController extends Controller
 {
@@ -52,6 +54,46 @@ class UserController extends Controller
             'recordsFiltered' => $filteredusers,
             'data' => $users
         ]);
+    }
+
+    public function createPDF(){
+        $document = new Mpdf();
+        $users = User::all();
+
+        $rows = '';
+        foreach ($users as $user) {
+            $is_active = ($user->is_active == 1) ? 'Active' : 'Not Active';
+            $rows .= '<tr>';
+            $rows .= '<td>' . $user->id . '</td>';
+            $rows .= '<td>' . $user->name . '</td>';
+            $rows .= '<td>' . $user->email . '</td>';
+            $rows .= '<td>' . $is_active . '</td>';
+            $rows .= '<td  style="width: 25%"> </td>';
+            $rows .= '</tr>';
+        }
+
+            $tableHTML = '
+            <h1>User Manager</h1>
+            <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ' . $rows . '
+                </tbody>
+            </table>
+            ';
+
+
+        $document->WriteHTML($tableHTML);
+        Storage::put('pdfs/user_information.pdf', $document->Output('user_information.pdf', "S"));
+        $document->Output('user_information.pdf', "I");
     }
 
     /**

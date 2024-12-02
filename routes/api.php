@@ -20,6 +20,7 @@ Route::middleware(['auth' , 'auth:sanctum'])->group(function () {
 
 Route::middleware(['auth', 'auth:sanctum'])->group(function () {
     Route::get('user/draw', [UserController::class, 'draw'])->name('user.draw');
+    Route::get('user/createPDF', [UserController::class, 'createPDF'])->name('user.createPDF');
     Route::resource('user', UserController::class);
 });
 
