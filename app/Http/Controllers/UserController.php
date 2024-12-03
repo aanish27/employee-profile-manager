@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Error;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Mpdf\Mpdf;
 
 class UserController extends Controller
@@ -62,8 +61,9 @@ class UserController extends Controller
         $users = User::all();
         $html = view('docs.userPdf', ['users' => $users , 'title' => 'User Mangement']);
         $document->WriteHTML($html);
-        Storage::put('pdfs/user_information.pdf', $document->Output('user_information.pdf', "S"));
-        $document->Output('user_information.pdf', "I");
+        date_default_timezone_set('America/New_York');
+        $filename = 'users_information_'. date('Y/m/d H:i:s');
+        $document->Output($filename . '.pdf', "D");
     }
 
     /**

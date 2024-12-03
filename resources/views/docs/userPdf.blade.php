@@ -11,12 +11,11 @@
     </thead>
     <tbody>
         @foreach ( $users as $user ){
-           {{ $is_active = ($user->is_active == 1) ? 'Active' : 'Not Active';}}
             <tr>
                 <td> {{ $user->id }}</td>
                 <td> {{ $user->name }}</td>
                 <td> {{ $user->email }}</td>
-                <td> {{ $is_active }}</td>
+                <td> {{ $user->status }}</td>
                 <td width="40%"></td>
             </tr>
         }
