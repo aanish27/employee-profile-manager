@@ -59,6 +59,7 @@ class UserController extends Controller
     public function createPDF(){
         $document = new Mpdf(['orientation' => 'L']);
         $users = User::all();
+        $document->setFooter('{PAGENO}');
         $html = view('docs.userPdf', ['users' => $users , 'title' => 'User Mangement']);
         $document->WriteHTML($html);
         $filename = 'users_information_'. date('Y/m/d H:i:s');
