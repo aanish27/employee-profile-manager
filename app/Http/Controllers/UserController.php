@@ -61,7 +61,6 @@ class UserController extends Controller
         $users = User::all();
         $html = view('docs.userPdf', ['users' => $users , 'title' => 'User Mangement']);
         $document->WriteHTML($html);
-        date_default_timezone_set('America/New_York');
         $filename = 'users_information_'. date('Y/m/d H:i:s');
         $document->Output($filename . '.pdf', "D");
     }
