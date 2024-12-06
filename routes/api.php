@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,5 +17,11 @@ Route::middleware(['auth' , 'auth:sanctum'])->group(function () {
     Route::delete('/employee/{id}', [EmployeeController::class , 'destroy'])->name('employee.destroy');
 });
 
+
+Route::middleware(['auth', 'auth:sanctum'])->group(function () {
+    Route::get('user/draw', [UserController::class, 'draw'])->name('user.draw');
+    Route::get('user/createPDF', [UserController::class, 'createPDF'])->name('user.createPDF');
+    Route::resource('user', UserController::class);
+});
 
 

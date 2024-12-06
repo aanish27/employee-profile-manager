@@ -32,6 +32,8 @@ class DatabaseSeeder extends Seeder
             'password' =>  Hash::make('password')
         ]);
 
+        User::factory(100)->create();
+
         for ($i=0; $i < 1000 ; $i++) {
             DB::table('employee_project')->insert([
                 'project_id' => fake()->numberBetween(1,60),

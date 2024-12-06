@@ -9,16 +9,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
-
 class User extends Authenticatable
 {
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     public function sendPasswordResetNotification($token)
     {
         Mail::to(request()->email)->send(new ResetPassword($token, request()->email));
     }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -50,6 +49,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    protected $appends = [
+        'status',
+    ];
+
+    public function getStatusAttribute(): string
+    {
+        return $this->is_active ? 'Active' : 'Inactive';
     }
 }
