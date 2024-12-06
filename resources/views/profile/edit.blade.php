@@ -24,6 +24,15 @@
             $('#sidebar-short').toggleClass('d-none');
         });
 
+        $('#profile_image').on('click', function () {
+            $('#profile_pic').click();
+        });
+
+        $('#profile_pic').on('change', function () {
+            $('#profile_update').submit();
+        });
+
+
         });
     </script>
 </x-app-layout>
