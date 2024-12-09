@@ -5,6 +5,12 @@
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
+         <li>
+            <a href="#" class="nav-link p-1 my-1 ">
+                <i class="bi bi-clipboard-data pe-1 fs-5"></i>
+                Dashboard
+            </a>
+        </li>
         <li class="nav-item ">
             <a  href="{{ route('companys.index') }}" class="nav-link p-1 my-1 btn-company"  aria-current="page">
                 <i class="bi bi-building pe-1 fs-5"></i>
@@ -21,12 +27,6 @@
             <a href="{{ route('user.index') }}" class="nav-link p-1 my-1 btn-user">
                 <i class="bi bi-person-badge pe-1 fs-5"></i>
                 User
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link p-1 my-1 ">
-                <i class="bi bi-clipboard-data pe-1 fs-5"></i>
-                Dashboard
             </a>
         </li>
     </ul>
@@ -56,6 +56,11 @@
     </a>
 
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li>
+            <a href="{{ route('dashboard') }}" class="nav-link   border-bottom rounded-0 btn-dashboard" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="right">
+                <i class="bi bi-clipboard-data fs-4 text-center"></i>
+            </a>
+        </li>
         <li class="nav-item ">
             <a  href="{{ route('companys.index') }}" class="nav-link border-bottom btn-company rounded-0" title="Company" data-bs-toggle="tooltip" data-bs-placement="right">
                 <i class="bi bi-building fs-4 text-center"></i>
@@ -71,11 +76,7 @@
                 <i class="bi bi-person-badge fs-4 text-center"></i>
             </a>
         </li>
-        <li>
-            <a href="#" class="nav-link   border-bottom rounded-0" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="right">
-                <i class="bi bi-clipboard-data fs-4 text-center"></i>
-            </a>
-        </li>
+
     </ul>
 
     <div class="dropdown border-top">

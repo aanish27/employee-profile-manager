@@ -8,7 +8,7 @@
 
     <div class="nav-right d-flex align-items-center gap-2 ">
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right fs-5 "></i></a>
-        <form id="logout-form" action="{{ route('employee') }}" method="GET" style="display: none;">
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
 
         </form>
